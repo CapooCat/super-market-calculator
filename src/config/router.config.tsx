@@ -9,6 +9,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: ":overlayLink",
+        element: <App />,
       },
     ],
   },

@@ -17,7 +17,7 @@ const FormText = (props: IFieldInput) => {
       control={control}
       defaultValue=""
       render={({ field, fieldState }) => {
-        const { value } = field;
+        const { value, name } = field;
         const { invalid, error } = fieldState;
 
         return useMemo(
@@ -27,7 +27,7 @@ const FormText = (props: IFieldInput) => {
               <label>{props.title}</label>
             </FloatLabel>
           ),
-          [value, invalid, error]
+          [name, value, invalid, error]
         );
       }}
     />

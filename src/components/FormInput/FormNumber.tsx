@@ -36,7 +36,7 @@ const FormNumber = function FormNumber(props: IFieldInput) {
               <label>{props.title}</label>
             </FloatLabel>
           ),
-          [value, invalid, error]
+          [name, value, invalid, error]
         );
       }}
     />

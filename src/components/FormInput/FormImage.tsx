@@ -1,10 +1,15 @@
 import useAsync from "@/hooks/useAsync";
 import imageCompression from "browser-image-compression";
-import React from "react";
+import React, { memo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import Loading from "@/components/Loading";
 
-const FormImage = ({ title, name }) => {
+interface IFormImage {
+  title: string;
+  name: string;
+}
+
+const FormImage = memo(function ({ title, name }: IFormImage) {
   const { control, setValue } = useFormContext();
   const image = useWatch({ control, name });
 
@@ -61,6 +66,6 @@ const FormImage = ({ title, name }) => {
         />
       </div>
     );
-};
+});
 
 export default FormImage;
