@@ -6,13 +6,11 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PrimeReactConfig from "@/config/primeReact.config";
 import { FormArrayProvider } from "@/context/FormArrayContext";
-import useLocalStorage from "@/hooks/useLocalStorage";
 
 function App() {
-  const [fieldArray] = useLocalStorage([], "fieldArrayStore");
   const methods = useForm({
     defaultValues: {
-      fieldArray,
+      fieldArray: [],
     },
   });
 

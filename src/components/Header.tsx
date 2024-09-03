@@ -1,15 +1,12 @@
 import React from "react";
 import formatCurrency from "@/ultis/formatCurrency";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import { IFieldArray } from "@/models/IFieldArray";
-import { Button } from "primereact/button";
-import { IconReload } from "@tabler/icons-react";
-import { useFormArray } from "@/context/FormArrayContext";
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import ButtonReset from "./ButtonReset";
 
 const Header = () => {
-  const { fields } = useFormArray();
+  const { control } = useFormContext();
+  const fields = useWatch({ control, name: "fieldArray" });
 
   const total = fields.reduce((result, current: IFieldArray) => {
     current.price = current.price || 0;

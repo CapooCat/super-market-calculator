@@ -26,7 +26,6 @@
   font-weight: 400;
   font-size: 14px;
 
-  color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   @apply bg-gray-900;
 
@@ -46,12 +45,5 @@ body {
     .p-confirm-dialog-message {
       @apply m-0;
     }
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
   }
 }

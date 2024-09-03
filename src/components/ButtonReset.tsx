@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { IconReload } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { useFormArray } from "@/context/FormArrayContext";
 
-const ButtonReset = () => {
+const ButtonReset = memo(() => {
   const { remove } = useFormArray();
 
   const confirmReset = () => {
@@ -25,6 +25,6 @@ const ButtonReset = () => {
       <ConfirmDialog dismissableMask />
     </>
   );
-};
+});
 
 export default ButtonReset;

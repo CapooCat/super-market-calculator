@@ -7,7 +7,7 @@ const Form = () => {
 
   return (
     <ul className="gap-4 px-4 pb-20 divide-y-2 divide-gray-700 divide-dashed">
-      {fields.map((item, index) => (
+      {fields.map((item: any, index: number) => (
         <Item {...item} name={`fieldArray[${index}]`} key={item.id} onRemoveClick={() => remove(index)} />
       ))}
     </ul>

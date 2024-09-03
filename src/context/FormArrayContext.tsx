@@ -24,16 +24,11 @@ export const useFormArray = () => {
 
 export function FormArrayProvider({ children, name }) {
   const { control } = useFormContext();
-  const [fieldArray, setFieldArray] = useLocalStorage([], "fieldArrayStore");
 
   const methods: IFieldArray = useFieldArray({
     control: control,
     name: name,
   });
-
-  useEffect(() => {
-    setFieldArray(methods.fields);
-  }, [methods.fields]);
 
   return <FormArrayContext.Provider value={{ ...methods, name }}>{children}</FormArrayContext.Provider>;
 }
