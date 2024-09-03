@@ -44,6 +44,7 @@ const FormImage = ({ title, name }) => {
           accept="image/*"
           onChange={(e) => handleImage.execute(e)}
           className="absolute inset-0 opacity-0"
+          capture="environment"
         />
       </div>
     );
@@ -56,6 +57,7 @@ const FormImage = ({ title, name }) => {
           accept="image/*"
           onChange={(e) => handleImage.execute(e)}
           className="absolute inset-0 opacity-0"
+          capture="environment"
         />
       </div>
     );
