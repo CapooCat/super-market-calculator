@@ -1,0 +1,17 @@
+import React from "react";
+import { useFormArray } from "@/context/FormArrayContext";
+import Item from "./Item";
+
+const Form = () => {
+  const { fields, remove } = useFormArray();
+
+  return (
+    <ul className="gap-4 px-4 pb-20 divide-y-2 divide-gray-700 divide-dashed">
+      {fields.map((item, index) => (
+        <Item {...item} name={`fieldArray[${index}]`} key={item.id} onRemoveClick={() => remove(index)} />
+      ))}
+    </ul>
+  );
+};
+
+export default Form;

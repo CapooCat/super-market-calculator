@@ -1,0 +1,57 @@
+@layer tailwind-base, primereact, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+@layer components {
+  .avatar-surround-border {
+    &::after {
+      content: "";
+      @apply absolute w-full h-full bg-gray-500 rounded-tr-full;
+    }
+  }
+}
+
+@import "./lara-blue/theme.scss";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif !important;
+  line-height: 1.5rem;
+  font-weight: 400;
+  font-size: 14px;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  @apply bg-gray-900;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  display: grid;
+  place-items: start;
+  min-height: 100svh;
+  min-width: 100svw;
+
+  .p-dialog {
+    .p-confirm-dialog-message {
+      @apply m-0;
+    }
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
