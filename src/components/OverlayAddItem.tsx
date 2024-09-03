@@ -22,15 +22,15 @@ const OverlayAddItem = ({ onConfirmClick }) => {
         <FormImage title="Thêm ảnh sản phẩm" name="input.image" />
       </div>
 
-      <label className="flex flex-col w-full gap-1">
+      <div className="flex flex-col w-full gap-1">
         Giá tiền:
         <FormNumber name="input.price" min={0} mode="currency" currency="VND" locale="vi-VI" />
-      </label>
+      </div>
 
-      <label className="flex flex-col w-full gap-1">
+      <div className="flex flex-col w-full gap-1">
         Số lượng:
         <FormNumber name="input.quantity" showButtons buttonLayout="horizontal" min={0} max={100} />
-      </label>
+      </div>
 
       <Button className="justify-center w-full mt-4 text-xl font-medium" onClick={handleOnConfirm}>
         Thêm sản phẩm
