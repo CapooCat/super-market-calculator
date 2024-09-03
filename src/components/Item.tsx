@@ -7,7 +7,7 @@ import { IconX } from "@tabler/icons-react";
 const Item = ({ name, onRemoveClick }: any) => {
   return (
     <li className="flex items-center w-full gap-4 py-8">
-      <div className="w-24">
+      <div className="w-36">
         <FormImage title="Thêm ảnh" name={`${name}.image`} />
       </div>
 

@@ -29,6 +29,7 @@ const ButtonReset = memo(() => {
         onHide={() => showDialog(false)}
       >
         <OverlayConfirmDelete
+          message="Bạn có chắc là muốn xoá toàn bộ ? dữ liệu sẽ không thể khôi phục lại"
           onAcceptClick={() => {
             remove();
             showDialog(false);
