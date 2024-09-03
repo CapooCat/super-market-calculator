@@ -31,14 +31,14 @@ export function FormArrayProvider({ children, name }) {
     name: name,
   });
 
-  useEffect(() => {
-    const handleStore = () => {
-      const fields = getValues(name);
-      setFieldArray(fields);
-    };
-    window.addEventListener("beforeunload", handleStore);
-    return () => window.removeEventListener("beforeunload", handleStore);
-  }, []);
+  // useEffect(() => {
+  //   const handleStore = () => {
+  //     const fields = getValues(name);
+  //     setFieldArray(fields);
+  //   };
+  //   window.addEventListener("beforeunload", handleStore);
+  //   return () => window.removeEventListener("beforeunload", handleStore);
+  // }, []);
 
   return <FormArrayContext.Provider value={{ ...methods, name }}>{children}</FormArrayContext.Provider>;
 }

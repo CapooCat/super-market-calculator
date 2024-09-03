@@ -6,7 +6,10 @@ import { IconMinus, IconPlus } from "@tabler/icons-react";
 
 interface IFieldInput extends InputNumberProps {
   name: string;
-  multiply?: number;
+  extend?: {
+    multiply?: number;
+    onPressEnter?: () => void;
+  };
 }
 
 const FormNumber = (props: IFieldInput) => {
@@ -23,13 +26,14 @@ const FormNumber = (props: IFieldInput) => {
         const { invalid, error } = fieldState;
 
         const handleOnChange = (e) => {
-          if (props.multiply && !value) onChange(e.value * props.multiply);
+          if (props.extend?.multiply && !value) onChange(e.value * props.extend?.multiply);
           else onChange(e.value);
         };
 
         const handleKeyDown = (e) => {
           if (e.key === "Enter") {
             e.target.blur();
+            setTimeout(() => props.extend?.onPressEnter && props.extend?.onPressEnter(), 100);
           }
         };
 

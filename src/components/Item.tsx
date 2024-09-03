@@ -12,15 +12,8 @@ const Item = ({ name, onRemoveClick }: any) => {
       </div>
 
       <div className="flex flex-col flex-1 gap-4">
-        <FormNumber
-          name={`${name}.price`}
-          title="Giá tiền"
-          min={0}
-          minFractionDigits={0}
-          maxFractionDigits={3}
-          multiply={1000}
-        />
-        <FormNumber name={`${name}.quantity`} showButtons buttonLayout="horizontal" min={0} max={100} />
+        <FormNumber name={`${name}.price`} title="Giá tiền" min={0} minFractionDigits={0} maxFractionDigits={3} />
+        <FormNumber name={`${name}.quantity`} showButtons buttonLayout="horizontal" min={1} max={100} />
       </div>
 
       <Button

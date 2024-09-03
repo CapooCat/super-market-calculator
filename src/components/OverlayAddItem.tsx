@@ -10,9 +10,9 @@ const OverlayAddItem = ({ onConfirmClick }) => {
   const { append } = useFormArray();
 
   const handleOnConfirm = () => {
-    const [inputImage, inputPrice, inputQuantity] = getValues(["input.image", "input.price", "input.quantity"]);
-    append({ image: inputImage, price: inputPrice, quantity: inputQuantity });
-    setValue("input", { image: null, price: null, quantity: null });
+    const [inputImage, inputPrice] = getValues(["input.image", "input.price"]);
+    append({ image: inputImage, price: inputPrice, quantity: 1 });
+    setValue("input", { image: null, price: null });
     onConfirmClick();
   };
 
@@ -24,12 +24,16 @@ const OverlayAddItem = ({ onConfirmClick }) => {
 
       <div className="flex flex-col w-full gap-1">
         Giá tiền:
-        <FormNumber name="input.price" min={0} minFractionDigits={0} maxFractionDigits={3} multiply={1000} />
-      </div>
-
-      <div className="flex flex-col w-full gap-1">
-        Số lượng:
-        <FormNumber name="input.quantity" showButtons buttonLayout="horizontal" min={0} max={100} />
+        <FormNumber
+          name="input.price"
+          min={0}
+          minFractionDigits={0}
+          maxFractionDigits={3}
+          extend={{
+            multiply: 1000,
+            onPressEnter: () => handleOnConfirm(),
+          }}
+        />
       </div>
 
       <Button className="justify-center w-full mt-4 text-xl font-medium" onClick={handleOnConfirm}>
