@@ -24,14 +24,7 @@ const OverlayAddItem = ({ onConfirmClick }) => {
 
       <div className="flex flex-col w-full gap-1">
         Giá tiền:
-        <FormNumber
-          name="input.price"
-          min={0}
-          minFractionDigits={0}
-          maxFractionDigits={3}
-          multiply={1000}
-          suffix=" đ"
-        />
+        <FormNumber name="input.price" min={0} minFractionDigits={0} maxFractionDigits={3} multiply={1000} />
       </div>
 
       <div className="flex flex-col w-full gap-1">

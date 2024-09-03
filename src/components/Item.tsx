@@ -16,7 +16,6 @@ const Item = ({ name, onRemoveClick }: any) => {
           name={`${name}.price`}
           title="Giá tiền"
           min={0}
-          suffix=" đ"
           minFractionDigits={0}
           maxFractionDigits={3}
           multiply={1000}
