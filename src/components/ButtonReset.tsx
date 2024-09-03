@@ -14,7 +14,7 @@ const ButtonReset = memo(() => {
 
   const showDialog = (status: boolean) => {
     if (status) navigate(`/${thisOverlay}`);
-    else navigate("/");
+    else navigate(-1);
   };
 
   return (
