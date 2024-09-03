@@ -12,7 +12,15 @@ const Item = ({ name, onRemoveClick }: any) => {
       </div>
 
       <div className="flex flex-col flex-1 gap-4">
-        <FormNumber name={`${name}.price`} title="Giá tiền" min={0} mode="currency" currency="VND" locale="vi-VI" />
+        <FormNumber
+          name={`${name}.price`}
+          title="Giá tiền"
+          min={0}
+          suffix=" đ"
+          minFractionDigits={0}
+          maxFractionDigits={3}
+          multiply={1000}
+        />
         <FormNumber name={`${name}.quantity`} showButtons buttonLayout="horizontal" min={0} max={100} />
       </div>
 
