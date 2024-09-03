@@ -24,7 +24,7 @@
   font-family: "Roboto", sans-serif;
   line-height: 1.5rem;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 15px;
 
   color: rgba(255, 255, 255, 0.87);
   @apply bg-gray-900;
@@ -40,6 +40,7 @@ body {
   place-items: start;
   min-height: 100svh;
   min-width: 100svw;
+  overscroll-behavior: contain;
 
   .p-dialog {
     .p-confirm-dialog-message {

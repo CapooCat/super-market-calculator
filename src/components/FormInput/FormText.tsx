@@ -1,8 +1,6 @@
 import React, { useMemo, useRef } from "react";
 import { InputText, InputTextProps } from "primereact/inputtext";
 import { Controller, useFormContext } from "react-hook-form";
-import { FloatLabel } from "primereact/floatlabel";
-
 interface IFieldInput extends InputTextProps {
   name: string;
 }
@@ -21,12 +19,7 @@ const FormText = (props: IFieldInput) => {
         const { invalid, error } = fieldState;
 
         return useMemo(
-          () => (
-            <FloatLabel>
-              <InputText {...field} {...props} ref={input} invalid={invalid} value={value ?? ""} />
-              <label>{props.title}</label>
-            </FloatLabel>
-          ),
+          () => <InputText {...field} {...props} ref={input} invalid={invalid} value={value ?? ""} />,
           [name, value, invalid, error]
         );
       }}
