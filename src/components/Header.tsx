@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <section className="sticky top-0 left-0 flex justify-between items-center w-[100svw] px-4 py-4 bg-gray-800 z-20 gap-4">
       <ButtonReset />
-      <div className="flex justify-between w-full">
+      <div className="flex justify-between w-full text-lg font-medium">
         <p>Tổng tiền:</p>
         <p>{formatCurrency(total)}</p>
       </div>

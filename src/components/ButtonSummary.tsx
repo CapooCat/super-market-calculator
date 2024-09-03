@@ -3,26 +3,32 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React, { useState } from "react";
 import OverlaySummary from "./OverlaySummary";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ButtonSummary = () => {
-  const [visible, setVisible] = useState(false);
+  let { overlayLink } = useParams();
+  const navigate = useNavigate();
+  const thisOverlay = "summary";
+
+  const showDialog = (status: boolean) => {
+    if (status) navigate(`/${thisOverlay}`);
+    else navigate("/");
+  };
 
   return (
     <>
       <Button
         icon={<IconFileAnalytics />}
         className="-translate-y-[50%] w-16 h-16 rounded-full border-gray-900 border-8"
-        onClick={() => setVisible(true)}
+        onClick={() => showDialog(true)}
       />
 
       <Dialog
         header="Số liệu mua hàng"
-        visible={visible}
+        visible={overlayLink == thisOverlay}
         position="bottom"
         dismissableMask
-        onHide={() => {
-          setVisible(false);
-        }}
+        onHide={() => showDialog(false)}
       >
         <OverlaySummary />
       </Dialog>

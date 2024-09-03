@@ -1,28 +1,34 @@
 import { IconBroadcast } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import React, { useState } from "react";
+import React from "react";
 import OverlayOnlineShopping from "./OverlayOnlineShopping";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ButtonOnlineShopping = () => {
-  const [visible, setVisible] = useState(false);
+  let { overlayLink } = useParams();
+  const navigate = useNavigate();
+  const thisOverlay = "onlineShopping";
+
+  const showDialog = (status: boolean) => {
+    if (status) navigate(`/${thisOverlay}`);
+    else navigate("/");
+  };
 
   return (
     <>
       <Button
         icon={<IconBroadcast />}
         className="-translate-y-[50%] w-16 h-16 rounded-full border-gray-900 border-8"
-        onClick={() => setVisible(true)}
+        onClick={() => showDialog(true)}
       />
 
       <Dialog
         header="Mua sắm cùng nhau"
-        visible={visible}
+        visible={overlayLink == thisOverlay}
         position="bottom"
         dismissableMask
-        onHide={() => {
-          setVisible(false);
-        }}
+        onHide={() => showDialog(false)}
       >
         <OverlayOnlineShopping />
       </Dialog>

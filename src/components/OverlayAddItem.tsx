@@ -32,7 +32,7 @@ const OverlayAddItem = ({ onConfirmClick }) => {
         <FormNumber name="input.quantity" showButtons buttonLayout="horizontal" min={0} max={100} />
       </label>
 
-      <Button className="justify-center w-full mt-4 text-xl font-medium text-white" onClick={handleOnConfirm}>
+      <Button className="justify-center w-full mt-4 text-xl font-medium" onClick={handleOnConfirm}>
         Thêm sản phẩm
       </Button>
     </section>
