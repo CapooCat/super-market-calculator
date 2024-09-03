@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { InputNumber, InputNumberProps } from "primereact/inputnumber";
-import { FloatLabel } from "primereact/floatlabel";
 import { Button } from "primereact/button";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 
@@ -10,7 +9,7 @@ interface IFieldInput extends InputNumberProps {
   multiply?: number;
 }
 
-const FormNumber = function FormNumber(props: IFieldInput) {
+const FormNumber = (props: IFieldInput) => {
   const { control, setValue } = useFormContext();
   const input = useRef(null);
 
@@ -18,7 +17,7 @@ const FormNumber = function FormNumber(props: IFieldInput) {
     <Controller
       name={props.name}
       control={control}
-      defaultValue={null}
+      defaultValue={0}
       render={({ field, fieldState }) => {
         const { name, value, onBlur, onChange } = field;
         const { invalid, error } = fieldState;
@@ -26,6 +25,12 @@ const FormNumber = function FormNumber(props: IFieldInput) {
         const handleOnChange = (e) => {
           if (props.multiply && !value) onChange(e.value * props.multiply);
           else onChange(e.value);
+        };
+
+        const handleKeyDown = (e) => {
+          if (e.key === "Enter") {
+            e.target.blur();
+          }
         };
 
         return useMemo(
@@ -36,8 +41,9 @@ const FormNumber = function FormNumber(props: IFieldInput) {
                 {...props}
                 inputRef={input}
                 id={name}
-                value={value ?? null}
+                value={value ?? 0}
                 onValueChange={(e) => handleOnChange(e)}
+                onKeyDown={(e) => handleKeyDown(e)}
                 showButtons={false}
                 onBlur={onBlur}
                 invalid={invalid}
