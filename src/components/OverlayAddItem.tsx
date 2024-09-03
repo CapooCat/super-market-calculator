@@ -24,7 +24,7 @@ const OverlayAddItem = ({ onConfirmClick }) => {
 
       <label className="flex flex-col w-full gap-1">
         Giá tiền:
-        <FormNumber name="input.price" min={0} />
+        <FormNumber name="input.price" min={0} mode="currency" currency="VND" locale="vi-VI" />
       </label>
 
       <label className="flex flex-col w-full gap-1">

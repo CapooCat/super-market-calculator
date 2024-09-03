@@ -29,6 +29,7 @@ const FormNumber = function FormNumber(props: IFieldInput) {
                 id={name}
                 value={value ?? null}
                 onValueChange={(e) => onChange(e.value)}
+                onFocus={(e) => props.showButtons && e.target.blur()}
                 onBlur={onBlur}
                 invalid={invalid}
               />
