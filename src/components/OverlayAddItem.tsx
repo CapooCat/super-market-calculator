@@ -30,7 +30,7 @@ const OverlayAddItem = ({ onConfirmClick }) => {
           minFractionDigits={0}
           maxFractionDigits={3}
           extend={{
-            multiply: 1000,
+            quickComplete: true,
             onPressEnter: () => handleOnConfirm(),
           }}
         />

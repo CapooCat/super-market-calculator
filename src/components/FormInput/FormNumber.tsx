@@ -7,7 +7,7 @@ import { IconMinus, IconPlus } from "@tabler/icons-react";
 interface IFieldInput extends InputNumberProps {
   name: string;
   extend?: {
-    multiply?: number;
+    quickComplete?: boolean;
     onPressEnter?: () => void;
   };
 }
@@ -26,7 +26,8 @@ const FormNumber = (props: IFieldInput) => {
         const { invalid, error } = fieldState;
 
         const handleOnChange = (e) => {
-          if (props.extend?.multiply && !value) onChange(e.value * props.extend?.multiply);
+          const regex = /000$/;
+          if (props.extend?.quickComplete && !regex.test(e.value)) onChange(e.value * 1000);
           else onChange(e.value);
         };
 
