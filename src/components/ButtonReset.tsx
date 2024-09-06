@@ -2,39 +2,34 @@ import React, { memo } from "react";
 import { IconReload } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { useFormArray } from "@/context/FormArrayContext";
-import { useNavigate, useParams } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import OverlayConfirmDelete from "./OverlayConfirmDelete";
+import useOverlayParam from "@/hooks/useOverlayParam";
 
 const ButtonReset = memo(() => {
   const { remove } = useFormArray();
-  let { overlayLink } = useParams();
-  const navigate = useNavigate();
-  const thisOverlay = "reset";
+  const { isThisOverlay, showOverlay } = useOverlayParam("reset");
 
-  const showDialog = (status: boolean) => {
-    if (status) navigate(`/${thisOverlay}`);
-    else navigate(-1);
+  const handleAccept = () => {
+    remove();
+    showOverlay(false);
   };
 
   return (
     <>
-      <Button icon={<IconReload size={18} />} className="rounded-full" onClick={() => showDialog(true)} />
+      <Button icon={<IconReload size={18} />} className="rounded-full" onClick={() => showOverlay(true)} />
 
       <Dialog
         header="Xoá toàn bộ?"
-        visible={overlayLink == thisOverlay}
+        visible={isThisOverlay}
         position="bottom"
         dismissableMask
-        onHide={() => showDialog(false)}
+        onHide={() => showOverlay(false)}
       >
         <OverlayConfirmDelete
           message="Bạn có chắc là muốn xoá toàn bộ ? dữ liệu sẽ không thể khôi phục lại"
-          onAcceptClick={() => {
-            remove();
-            showDialog(false);
-          }}
-          onRejectClick={() => showDialog(false)}
+          onAcceptClick={() => handleAccept()}
+          onRejectClick={() => showOverlay(false)}
         />
       </Dialog>
     </>

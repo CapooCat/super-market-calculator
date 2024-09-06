@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { PrimeReactProvider } from "primereact/api";
 import { FormProvider, useForm } from "react-hook-form";
 import Form from "@/components/Form";
@@ -6,15 +6,14 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PrimeReactConfig from "@/config/primeReact.config";
 import { FormArrayProvider } from "@/context/FormArrayContext";
-import useLocalStorage from "./hooks/useLocalStorage";
-import { IFieldArray } from "./models/IFieldArray";
+import { CameraProvider } from "@/context/CameraContext";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 function App() {
-  // let [fieldArray] = useLocalStorage([], "fieldArrayStore");
-  // fieldArray = fieldArray.map((item: IFieldArray) => ({ ...item, image: undefined }));
+  let [fieldArray] = useLocalStorage([], "fieldArrayStore");
   const methods = useForm({
     defaultValues: {
-      fieldArray: [],
+      fieldArray,
     },
   });
 
@@ -22,9 +21,11 @@ function App() {
     <FormProvider {...methods}>
       <FormArrayProvider name="fieldArray">
         <PrimeReactProvider value={PrimeReactConfig}>
-          <Header />
-          <Form />
-          <Footer />
+          <CameraProvider>
+            <Header />
+            <Form />
+            <Footer />
+          </CameraProvider>
         </PrimeReactProvider>
       </FormArrayProvider>
     </FormProvider>

@@ -1,37 +1,29 @@
 import React from "react";
 import { IconPlus } from "@tabler/icons-react";
 import { Button } from "primereact/button";
-import { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import OverlayAddItem from "./OverlayAddItem";
-import { useNavigate, useParams } from "react-router-dom";
+import useOverlayParam from "@/hooks/useOverlayParam";
 
 const ButtonAddItem = () => {
-  let { overlayLink } = useParams();
-  const navigate = useNavigate();
-  const thisOverlay = "addItem";
-
-  const showDialog = (status: boolean) => {
-    if (status) navigate(`/${thisOverlay}`);
-    else navigate(-1);
-  };
+  const { isThisOverlay, showOverlay } = useOverlayParam("addItem");
 
   return (
     <>
       <Button
         icon={<IconPlus />}
         className="-translate-y-[50%] w-16 h-16 rounded-full border-gray-900 border-8"
-        onClick={() => showDialog(true)}
+        onClick={() => showOverlay(true)}
       />
 
       <Dialog
         header="Thêm sản phẩm"
-        visible={overlayLink == thisOverlay}
+        visible={isThisOverlay}
         position="bottom"
         dismissableMask
-        onHide={() => showDialog(false)}
+        onHide={() => showOverlay(false)}
       >
-        <OverlayAddItem onConfirmClick={() => showDialog(false)} />
+        <OverlayAddItem onConfirmClick={() => showOverlay(false)} />
       </Dialog>
     </>
   );
