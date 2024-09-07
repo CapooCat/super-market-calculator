@@ -6,7 +6,7 @@ const Form = () => {
   const { fields, remove } = useFormArray();
 
   return (
-    <ul className="gap-4 px-4 pb-20 divide-y-2 divide-gray-700 divide-dashed">
+    <ul className="gap-4 px-4 divide-y-2 divide-gray-700 pb-28 divide-dashed">
       {fields.map((item: any, index: number) => (
         <Item {...item} name={`fieldArray[${index}]`} key={item.id} onRemoveClick={() => remove(index)} />
       ))}
