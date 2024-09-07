@@ -17,7 +17,7 @@ const OverlayAddItem = ({ onConfirmClick }) => {
   };
 
   return (
-    <section className="flex flex-col items-center gap-6">
+    <section className="flex flex-col items-center gap-6 mb-10">
       <div className="w-[50%]">
         <FormImage title="Thêm ảnh sản phẩm" name="input.image" />
       </div>
@@ -36,7 +36,7 @@ const OverlayAddItem = ({ onConfirmClick }) => {
         />
       </div>
 
-      <Button className="justify-center w-full mt-4 mb-6 text-xl font-medium" onClick={handleOnConfirm}>
+      <Button className="justify-center w-full mt-4 text-xl font-medium" onClick={handleOnConfirm}>
         Thêm sản phẩm
       </Button>
     </section>
