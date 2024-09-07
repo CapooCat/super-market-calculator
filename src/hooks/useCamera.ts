@@ -96,11 +96,6 @@ const useCamera = (): IUseCamera => {
     }
   };
 
-  useEffect(() => {
-    stopCamera();
-    clearPhoto();
-  }, []);
-
   return { videoRef, canvasRef, isCameraActive, photo, clearPhoto, startCamera, takePhoto, stopCamera };
 };
 

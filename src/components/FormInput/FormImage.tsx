@@ -32,13 +32,6 @@ const FormImage = memo(function ({ title, name }: IFormImage) {
     );
   };
 
-  // useEffect(() => {
-  //   if (image) {
-  //     const binaryString = atob(image.split(",")[1] || image);
-  //     alert(binaryString.length / 1024 + " KB");
-  //   }
-  // }, [image]);
-
   if (image)
     return (
       <ImageInput className="p-0 border-none">

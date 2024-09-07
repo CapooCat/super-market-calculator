@@ -10,6 +10,45 @@
   }
 }
 
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes toast {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+.animation-toast {
+  animation: toast 0.5s forwards;
+}
+
 .animation-flash {
-  animation: flash 0.2s forwards;
+  animation: flash 0.3s forwards;
+}
+
+.animation-fade-in {
+  animation: fade-in 0.3s forwards;
 }

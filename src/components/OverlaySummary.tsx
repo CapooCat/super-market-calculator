@@ -5,9 +5,11 @@ import { IconPhoto } from "@tabler/icons-react";
 import formatCurrency from "@/ultis/formatCurrency";
 import Label from "./Label";
 
-interface ISummaryPrice {
+interface ISummary {
   lowest: IFieldArray;
   highest: IFieldArray;
+  most: IFieldArray;
+  least: IFieldArray;
 }
 
 interface IItem {
@@ -18,12 +20,18 @@ interface IItem {
 const OverlaySummary = () => {
   const { control } = useFormContext();
   const fields = useWatch({ control, name: "fieldArray" });
-  const summary: ISummaryPrice = fields.reduce(
-    (result: ISummaryPrice, current: IFieldArray) => {
+  const summary: ISummary = fields.reduce(
+    (result: ISummary, current: IFieldArray) => {
       result.lowest = result.lowest ?? current;
       result.highest = result.highest ?? current;
+      result.least = result.least ?? current;
+      result.most = result.most ?? current;
+
       result.lowest = current.price < result.lowest.price ? current : result.lowest;
       result.highest = current.price > result.highest.price ? current : result.highest;
+      result.least = current.quantity < result.least.quantity ? current : result.least;
+      result.most = current.quantity > result.most.quantity ? current : result.most;
+
       return result;
     },
     { lowestPrice: null, highestPrice: null }
@@ -47,7 +55,7 @@ const OverlaySummary = () => {
   const Item = ({ title, item }: IItem) => {
     return (
       <li className="py-4 first:pt-0 last:pb-0">
-        <p className="pb-2 mb-2">{title}</p>
+        <p className="pb-2 mb-2 font-bold">{title}</p>
         {item ? (
           <div className="flex gap-4">
             <ItemImage src={item.image} />
@@ -69,6 +77,8 @@ const OverlaySummary = () => {
     <ul className="flex flex-col divide-y-2 divide-gray-700 divide-dashed">
       <Item title="Sản phẩm có đơn giá cao nhất:" item={summary.highest} />
       <Item title="Sản phẩm có đơn giá thấp nhất:" item={summary.lowest} />
+      <Item title="Sản phẩm có số lượng cao nhất:" item={summary.most} />
+      <Item title="Sản phẩm có số lượng thấp nhất:" item={summary.least} />
     </ul>
   );
 };

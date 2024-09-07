@@ -48,4 +48,24 @@ body {
       @apply m-0;
     }
   }
+
+  .overflow-visible {
+    .p-ink {
+      display: none;
+    }
+  }
+
+  .toast-plus {
+    &::before {
+      content: "+";
+      @apply mr-1;
+    }
+  }
+
+  .toast-minus {
+    &::before {
+      content: "-";
+      @apply mr-1;
+    }
+  }
 }

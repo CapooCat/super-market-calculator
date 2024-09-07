@@ -12,9 +12,11 @@ const ButtonAddItem = () => {
     <>
       <Button
         icon={<IconPlus />}
-        className="-translate-y-[50%] w-16 h-16 rounded-full border-gray-900 border-8"
+        className="relative -translate-y-[50%] w-16 h-16 rounded-full border-gray-900 border-8 justify-center items-center overflow-visible"
         onClick={() => showOverlay(true)}
-      />
+      >
+        <span className="absolute w-10 h-10 z-[-1] rounded-full bg-primary animate-ping opacity-75" />
+      </Button>
 
       <Dialog
         header="Thêm sản phẩm"

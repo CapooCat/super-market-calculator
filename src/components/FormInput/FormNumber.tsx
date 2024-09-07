@@ -16,6 +16,26 @@ const FormNumber = (props: IFieldInput) => {
   const { control, setValue } = useFormContext();
   const input = useRef(null);
 
+  const isAtMax = (value: number) => {
+    if (props.max && value > props.max) return true;
+    return false;
+  };
+
+  const isAtMin = (value: number) => {
+    if (props.min && value < props.min) return true;
+    return false;
+  };
+
+  const handlePlusValue = (value: number, name: string) => {
+    const plusValue = value + 1;
+    isAtMax(plusValue) || setValue(name, plusValue);
+  };
+
+  const handleMinusValue = (value: number, name: string) => {
+    const minusValue = value - 1;
+    isAtMin(minusValue) || setValue(name, minusValue);
+  };
+
   return (
     <Controller
       name={props.name}
@@ -41,7 +61,9 @@ const FormNumber = (props: IFieldInput) => {
         return useMemo(
           () => (
             <div className="flex gap-2">
-              {props.showButtons && <Button icon={<IconMinus size={16} />} onClick={() => setValue(name, value - 1)} />}
+              {props.showButtons && (
+                <Button icon={<IconMinus size={16} />} onClick={() => handleMinusValue(value, name)} />
+              )}
               <InputNumber
                 {...props}
                 inputRef={input}
@@ -53,7 +75,9 @@ const FormNumber = (props: IFieldInput) => {
                 onBlur={onBlur}
                 invalid={invalid}
               />
-              {props.showButtons && <Button icon={<IconPlus size={16} />} onClick={() => setValue(name, value + 1)} />}
+              {props.showButtons && (
+                <Button icon={<IconPlus size={16} />} onClick={() => handlePlusValue(value, name)} />
+              )}
             </div>
           ),
           [name, value, invalid, error]
