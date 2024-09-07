@@ -6,15 +6,18 @@ import formatCurrency from "@/ultis/formatCurrency";
 import Label from "./Label";
 
 interface ISummary {
-  lowest: IFieldArray;
-  highest: IFieldArray;
-  most: IFieldArray;
-  least: IFieldArray;
+  lowest: IFieldArray | null;
+  highest: IFieldArray | null;
+  most: IFieldArray | null;
+  total: {
+    price: number;
+    quantity: number;
+  };
 }
 
 interface IItem {
   title: string;
-  item: IFieldArray;
+  item: IFieldArray | null;
 }
 
 const OverlaySummary = () => {
@@ -24,17 +27,25 @@ const OverlaySummary = () => {
     (result: ISummary, current: IFieldArray) => {
       result.lowest = result.lowest ?? current;
       result.highest = result.highest ?? current;
-      result.least = result.least ?? current;
       result.most = result.most ?? current;
 
       result.lowest = current.price < result.lowest.price ? current : result.lowest;
       result.highest = current.price > result.highest.price ? current : result.highest;
-      result.least = current.quantity < result.least.quantity ? current : result.least;
       result.most = current.quantity > result.most.quantity ? current : result.most;
+      result.total.price += current.price;
+      result.total.quantity += current.quantity;
 
       return result;
     },
-    { lowestPrice: null, highestPrice: null }
+    {
+      lowest: null,
+      highest: null,
+      most: null,
+      total: {
+        price: 0,
+        quantity: 0,
+      },
+    }
   );
 
   const ItemImage = ({ src }) => {
@@ -55,11 +66,11 @@ const OverlaySummary = () => {
   const Item = ({ title, item }: IItem) => {
     return (
       <li className="py-4 first:pt-0 last:pb-0">
-        <p className="pb-2 mb-2 font-bold">{title}</p>
+        <p className="pb-2 font-bold">{title}</p>
         {item ? (
           <div className="flex gap-4">
             <ItemImage src={item.image} />
-            <div className="flex flex-col w-full gap-2">
+            <div className="flex flex-col w-full gap-1">
               <Label title="Giá sản phẩm:" value={formatCurrency(item.price)} />
               <Label title="Số lượng hiện tại:" value={item.quantity ?? 0} />
             </div>
@@ -75,10 +86,13 @@ const OverlaySummary = () => {
 
   return (
     <ul className="flex flex-col divide-y-2 divide-gray-700 divide-dashed">
+      <li className="flex flex-col gap-2 pb-4">
+        <Label title="Tổng tiền:" value={formatCurrency(summary.total.price)} />
+        <Label title="Tổng số lượng:" value={summary.total.quantity} />
+      </li>
       <Item title="Sản phẩm có đơn giá cao nhất:" item={summary.highest} />
       <Item title="Sản phẩm có đơn giá thấp nhất:" item={summary.lowest} />
       <Item title="Sản phẩm có số lượng cao nhất:" item={summary.most} />
-      <Item title="Sản phẩm có số lượng thấp nhất:" item={summary.least} />
     </ul>
   );
 };

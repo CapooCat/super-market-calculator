@@ -34,7 +34,7 @@ const FormImage = memo(function ({ title, name }: IFormImage) {
 
   if (image)
     return (
-      <ImageInput className="p-0 border-none">
+      <ImageInput className="!p-0 border-none">
         <img src={image} className="object-cover w-full rounded-xl aspect-square" />
       </ImageInput>
     );

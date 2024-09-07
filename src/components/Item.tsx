@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import { IconX } from "@tabler/icons-react";
 import FormTotal from "./FormInput/FormTotal";
 
-const Item = ({ name, onRemoveClick }: any) => {
+const Item = ({ name, index, onRemoveClick }: any) => {
   return (
     <li className="flex items-center w-full gap-4 py-6">
       <div className="w-36">
@@ -29,13 +29,16 @@ const Item = ({ name, onRemoveClick }: any) => {
         </div>
       </div>
 
-      <Button
-        icon={<IconX size={18} />}
-        text
-        severity="danger"
-        className="!p-0 col-span-full justify-self-end w-fit h-fit"
-        onClick={() => onRemoveClick()}
-      />
+      <div className="flex flex-col gap-2 mb-auto">
+        <Button
+          icon={<IconX size={18} />}
+          text
+          severity="danger"
+          className="w-8 mb-auto aspect-square bg-red-500/25"
+          onClick={() => onRemoveClick()}
+        />
+        <div className="flex items-center justify-center w-8 rounded-lg aspect-square bg-black/25">{index + 1}</div>
+      </div>
     </li>
   );
 };

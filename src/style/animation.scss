@@ -25,12 +25,12 @@
     transform: translateY(100%);
   }
 
-  20% {
+  10% {
     opacity: 1;
     transform: translateY(0%);
   }
 
-  80% {
+  90% {
     opacity: 1;
     transform: translateY(0%);
   }
@@ -42,7 +42,7 @@
 }
 
 .animation-toast {
-  animation: toast 0.5s forwards;
+  animation: toast 0.7s forwards;
 }
 
 .animation-flash {

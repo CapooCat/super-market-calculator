@@ -23,22 +23,12 @@ export const useFormArray = () => {
 };
 
 export function FormArrayProvider({ children, name }) {
-  const { control, getValues } = useFormContext();
-  const [fieldArray, setFieldArray] = useLocalStorage([], "fieldArrayStore");
+  const { control } = useFormContext();
 
   const methods: IFieldArray = useFieldArray({
     control: control,
     name: name,
   });
-
-  useEffect(() => {
-    const handleStore = () => {
-      const fields = getValues(name);
-      setFieldArray(fields);
-    };
-    window.addEventListener("beforeunload", handleStore);
-    return () => window.removeEventListener("beforeunload", handleStore);
-  }, []);
 
   return <FormArrayContext.Provider value={{ ...methods, name }}>{children}</FormArrayContext.Provider>;
 }

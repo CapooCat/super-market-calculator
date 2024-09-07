@@ -17,7 +17,7 @@ const ButtonSummary = () => {
       />
 
       <Dialog
-        header="Số liệu"
+        header="Tổng kết"
         visible={isThisOverlay}
         position="bottom"
         dismissableMask

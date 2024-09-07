@@ -34,7 +34,7 @@ const FormTotal = memo(function ({ priceField, quantityField }: ITotal) {
   useEffect(() => {
     if (totalStatus) {
       totalToastRef.current?.classList.add("animation-toast");
-      const timer = setTimeout(() => totalToastRef.current?.classList.remove("animation-toast"), 500);
+      const timer = setTimeout(() => totalToastRef.current?.classList.remove("animation-toast"), 700);
       return () => clearTimeout(timer);
     }
     return;

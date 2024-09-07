@@ -47,6 +47,7 @@ const FormNumber = (props: IFieldInput) => {
 
         const handleOnChange = (e) => {
           const regex = /000$/;
+
           if (props.extend?.quickComplete && !regex.test(e.value)) onChange(e.value * 1000);
           else onChange(e.value);
         };
