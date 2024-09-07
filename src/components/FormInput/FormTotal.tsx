@@ -26,6 +26,11 @@ const FormTotal = memo(function ({ priceField, quantityField }: ITotal) {
     "text-red-500 bg-red-500/25 toast-minus": totalStatus?.type == "isDecrease",
   });
 
+  const totalLabel = classNames("font-bold", {
+    "text-sm": formatCurrency(total ?? 0).length >= 13,
+    "text-xs": formatCurrency(total ?? 0).length >= 16,
+  });
+
   useEffect(() => {
     if (totalStatus) {
       totalToastRef.current?.classList.add("animation-toast");
@@ -48,8 +53,8 @@ const FormTotal = memo(function ({ priceField, quantityField }: ITotal) {
   }, [price, quantity]);
 
   return (
-    <div className="relative ">
-      {formatCurrency(total ?? 0)}
+    <div className="relative">
+      <span className={totalLabel}>{formatCurrency(total ?? 0)}</span>
       <div className={totalToast} ref={totalToastRef}>
         {formatCurrency(totalStatus ? totalStatus.byAmount : 0)}
       </div>

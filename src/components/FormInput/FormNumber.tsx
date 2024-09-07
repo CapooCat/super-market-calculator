@@ -69,6 +69,7 @@ const FormNumber = (props: IFieldInput) => {
                 inputRef={input}
                 id={name}
                 value={value ?? 0}
+                onFocus={(e) => e.target.select()}
                 onValueChange={(e) => handleOnChange(e)}
                 onKeyDown={(e) => handleKeyDown(e)}
                 showButtons={false}

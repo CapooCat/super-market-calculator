@@ -3,13 +3,9 @@ import FormImage from "./FormInput/FormImage";
 import FormNumber from "./FormInput/FormNumber";
 import { Button } from "primereact/button";
 import { IconX } from "@tabler/icons-react";
-import { useFormContext } from "react-hook-form";
-import formatCurrency from "@/ultis/formatCurrency";
 import FormTotal from "./FormInput/FormTotal";
 
 const Item = ({ name, onRemoveClick }: any) => {
-  const { getValues } = useFormContext();
-
   return (
     <li className="flex items-center w-full gap-4 py-6">
       <div className="w-36">
@@ -17,10 +13,18 @@ const Item = ({ name, onRemoveClick }: any) => {
       </div>
 
       <div className="flex flex-col flex-1 gap-4">
-        <FormNumber name={`${name}.price`} min={0} minFractionDigits={0} maxFractionDigits={3} />
+        <FormNumber
+          name={`${name}.price`}
+          min={0}
+          minFractionDigits={0}
+          maxFractionDigits={3}
+          extend={{
+            quickComplete: true,
+          }}
+        />
         <FormNumber name={`${name}.quantity`} showButtons buttonLayout="horizontal" min={1} />
-        <div className="flex gap-1 px-4 py-1 font-bold rounded-lg bg-black/50 w-fit">
-          <span className="font-normal">Tổng:</span>
+        <div className="flex flex-wrap gap-1 px-4 py-1 rounded-lg bg-black/50 w-fit">
+          Tổng:
           <FormTotal priceField={`${name}.price`} quantityField={`${name}.quantity`} />
         </div>
       </div>
