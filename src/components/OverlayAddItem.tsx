@@ -36,7 +36,7 @@ const OverlayAddItem = ({ onConfirmClick }) => {
         />
       </div>
 
-      <Button className="justify-center w-full my-4 text-xl font-medium" onClick={handleOnConfirm}>
+      <Button className="justify-center w-full mt-4 mb-6 text-xl font-medium" onClick={handleOnConfirm}>
         Thêm sản phẩm
       </Button>
     </section>
