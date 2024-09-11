@@ -1,4 +1,4 @@
-import { IconFileAnalytics } from "@tabler/icons-react";
+import { IconDeviceFloppy } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React from "react";
@@ -11,7 +11,7 @@ const ButtonSummary = () => {
   return (
     <>
       <Button
-        icon={<IconFileAnalytics />}
+        icon={<IconDeviceFloppy />}
         className="-translate-y-[50%] w-16 h-16 rounded-full border-gray-900 border-8"
         onClick={() => showOverlay(true)}
       />

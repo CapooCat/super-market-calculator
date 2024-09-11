@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import PrimeReactConfig from "@/config/primeReact.config";
 import { FormArrayProvider } from "@/context/FormArrayContext";
 import { CameraProvider } from "@/context/CameraContext";
+import { FormStorageProvider } from "@/context/FormStorageContext";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 function App() {
@@ -20,13 +21,15 @@ function App() {
   return (
     <FormProvider {...methods}>
       <FormArrayProvider name="fieldArray">
-        <PrimeReactProvider value={PrimeReactConfig}>
-          <CameraProvider>
-            <Header />
-            <Form />
-            <Footer />
-          </CameraProvider>
-        </PrimeReactProvider>
+        <FormStorageProvider name="fieldArray" storage="fieldArrayStore">
+          <PrimeReactProvider value={PrimeReactConfig}>
+            <CameraProvider>
+              <Header />
+              <Form />
+              <Footer />
+            </CameraProvider>
+          </PrimeReactProvider>
+        </FormStorageProvider>
       </FormArrayProvider>
     </FormProvider>
   );

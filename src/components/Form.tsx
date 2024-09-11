@@ -1,10 +1,8 @@
 import React from "react";
 import { useFormArray } from "@/context/FormArrayContext";
-import useFormStorage from "@/hooks/useFormStorage";
 import Item from "./Item";
 
 const Form = () => {
-  useFormStorage({ name: "fieldArray", storage: "fieldArrayStore" });
   const { fields, remove } = useFormArray();
 
   return (
