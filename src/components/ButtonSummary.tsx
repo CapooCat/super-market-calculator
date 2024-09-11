@@ -21,6 +21,9 @@ const ButtonSummary = () => {
         visible={isThisOverlay}
         position="bottom"
         dismissableMask
+        pt={{
+          content: () => "px-0",
+        }}
         onHide={() => showOverlay(false)}
       >
         <OverlaySummary />

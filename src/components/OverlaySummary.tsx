@@ -94,7 +94,9 @@ const OverlaySummary = () => {
 
   const handlePrint = () => {
     if (printComponent.current)
-      toPng(printComponent.current).then(function (dataUrl) {
+      toPng(printComponent.current, {
+        style: { borderRadius: "0.75rem", paddingTop: "1.5rem" },
+      }).then(function (dataUrl) {
         const date = dayjs().format("DD/MM/YYYY_hh:mm:ss");
         download(dataUrl, `hoa-don-${date}.png`);
       });
@@ -102,7 +104,10 @@ const OverlaySummary = () => {
 
   return (
     <>
-      <div className="flex flex-col pb-4 divide-y-2 divide-gray-700 divide-dashed" ref={printComponent}>
+      <div
+        className="flex flex-col px-6 pb-12 divide-y-2 divide-gray-700 bg-inherit divide-dashed"
+        ref={printComponent}
+      >
         <div className="flex flex-col gap-2 pb-4">
           <Label title="Tổng tiền:" value={formatCurrency(summary.total.price)} />
           <Label title="Tổng sản phẩm:" value={summary.total.quantity} />
@@ -117,9 +122,11 @@ const OverlaySummary = () => {
         </ul>
       </div>
 
-      <Button className="sticky bottom-0 justify-center w-full text-xl" onClick={handlePrint}>
-        Lưu tổng kết
-      </Button>
+      <div className="sticky bottom-0 px-6 -translate-y-6">
+        <Button className="justify-center w-full text-xl" onClick={handlePrint}>
+          Lưu tổng kết
+        </Button>
+      </div>
     </>
   );
 };
