@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
-import { Button } from "primereact/button";
-import { IconCheck, IconFocusCentered, IconX } from "@tabler/icons-react";
-import { classNames } from "primereact/utils";
-import { useNavigate } from "react-router-dom";
-import useCamera from "@/hooks/useCamera";
-import { useFormContext } from "react-hook-form";
-import compressImage from "@/ultis/compressImage";
 import useAsync from "../hooks/useAsync";
+
+import { IconCheck, IconFocusCentered, IconX } from "@tabler/icons-react";
+import { Button } from "primereact/button";
+import { classNames } from "primereact/utils";
+import React, { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
 import Loading from "./Loading";
+import useCamera from "@/hooks/useCamera";
+import compressImage from "@/utils/compressImage";
 
 const OverlayCamera = ({ fieldName }) => {
   const { setValue } = useFormContext();
@@ -48,7 +50,7 @@ const OverlayCamera = ({ fieldName }) => {
     "gap-4 bottom-10 translate-y-28 transition-all opacity-0 duration-300 pointer-event-none",
     {
       "opacity-100 !translate-y-0": !photo?.blob?.url,
-    }
+    },
   );
 
   const confirmPhotoActions = classNames(
@@ -56,7 +58,7 @@ const OverlayCamera = ({ fieldName }) => {
     "gap-4 bottom-10 translate-y-28 transition-all opacity-0 duration-300 pointer-event-none",
     {
       "opacity-100 !translate-y-0": !!photo?.blob?.url,
-    }
+    },
   );
 
   const handleDenyPhoto = () => {

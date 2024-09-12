@@ -1,6 +1,7 @@
-import React, { memo, useEffect } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
 import { classNames } from "primereact/utils";
+import React, { memo } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
+
 import { useCameraContext } from "@/context/CameraContext";
 
 interface IFormImage {
@@ -22,7 +23,7 @@ const FormImage = memo(function ({ title, name }: IFormImage) {
   const ImageInput = ({ children, className = "", disabled = false }: IImageInput) => {
     const styleClass = classNames(
       "box-border relative flex items-center justify-center w-full p-2 text-center border-2 border-gray-700 border-dashed rounded-xl aspect-square",
-      { [className]: className != null }
+      { [className]: className != null },
     );
 
     return (

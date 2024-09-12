@@ -1,7 +1,8 @@
+import { classNames } from "primereact/utils";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import formatCurrency from "@/ultis/formatCurrency";
-import { classNames } from "primereact/utils";
+
+import formatCurrency from "@/utils/formatCurrency";
 
 interface ITotal {
   priceField: string;

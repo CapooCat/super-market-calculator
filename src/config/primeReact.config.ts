@@ -15,7 +15,7 @@ const PrimeReactConfig: object = {
       root: "p-2",
     },
     tag: {
-      root: "p-0 px-2 text-sm w-fit font-normal",
+      root: "p-0 px-2 text-sm w-fit font-normal line-clamp-1",
     },
   },
 };

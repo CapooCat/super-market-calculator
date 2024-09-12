@@ -1,6 +1,6 @@
-import { useCameraContext } from "@/context/CameraContext";
-import debounce from "@/ultis/debounce";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useState } from "react";
+
+import debounce from "@/utils/debounce";
 
 export interface IUseCamera {
   videoRef: React.RefObject<HTMLVideoElement>;
