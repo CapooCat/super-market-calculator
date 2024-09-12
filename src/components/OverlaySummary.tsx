@@ -20,6 +20,7 @@ interface ISummary {
   lowest: IItem | null;
   highest: IItem | null;
   most: IItem | null;
+  date: string | null;
   total: {
     price: number;
     quantity: number;
@@ -36,10 +37,12 @@ const OverlaySummary = () => {
       result.lowest = result.lowest ?? { ...current, index };
       result.highest = result.highest ?? { ...current, index };
       result.most = result.most ?? { ...current, index };
+      result.date = result.date ?? current.date;
 
       if (current.price < result.lowest.price * result.lowest.quantity) result.lowest = { ...current, index };
       if (current.price > result.highest.price * result.highest.quantity) result.highest = { ...current, index };
       if (current.quantity > result.most.quantity) result.most = { ...current, index };
+      if (dayjs(result.date).isAfter(current.date)) result.date = dayjs(current.date).toISOString();
 
       result.total.price += current.price;
       result.total.quantity += current.quantity;
@@ -51,6 +54,7 @@ const OverlaySummary = () => {
       lowest: null,
       highest: null,
       most: null,
+      date: null,
       total: {
         price: 0,
         quantity: 0,
@@ -119,6 +123,7 @@ const OverlaySummary = () => {
           <Label title="Tổng tiền:" value={formatCurrency(summary.total.price)} />
           <Label title="Tổng sản phẩm:" value={summary.total.quantity} />
           <Label title="Tổng số lượng:" value={summary.total.item} />
+          <Label title="Ngày tạo:" value={dayjs(summary.date).format("DD/MM/YYYY HH:mm")} />
         </div>
 
         <ul className="pt-4">
@@ -131,7 +136,7 @@ const OverlaySummary = () => {
 
       <div className="sticky bottom-0 px-6 -translate-y-6">
         <Button className="justify-center w-full text-xl" onClick={handlePrint}>
-          Lưu tổng kết
+          Lưu hoá đơn
         </Button>
       </div>
     </>

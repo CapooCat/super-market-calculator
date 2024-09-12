@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Button } from "primereact/button";
 import React from "react";
 import { useFormContext } from "react-hook-form";
@@ -12,7 +13,7 @@ const OverlayAddItem = ({ onConfirmClick }) => {
 
   const handleOnConfirm = () => {
     const [inputImage, inputPrice] = getValues(["input.image", "input.price"]);
-    append({ image: inputImage, price: inputPrice, quantity: 1 });
+    append({ image: inputImage, price: inputPrice, quantity: 1, date: dayjs().toISOString() });
     setValue("input", { image: null, price: null });
     onConfirmClick();
   };
