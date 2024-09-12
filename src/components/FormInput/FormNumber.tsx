@@ -12,7 +12,7 @@ interface IFieldInput extends InputNumberProps {
   };
 }
 
-const FormNumber = (props: IFieldInput) => {
+const FormNumber = ({ ...props }: IFieldInput) => {
   const { control, setValue } = useFormContext();
   const input = useRef(null);
 

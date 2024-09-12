@@ -122,11 +122,8 @@ const OverlaySummary = () => {
 
   return (
     <>
-      <div className="flex gap-2 px-5 pb-4">
-        <FormText name="summary.name" placeholder="Tên cửa hàng..." />
-        <Button className="flex justify-center w-11" severity="danger" onClick={handleClearName}>
-          <IconX size={18} />
-        </Button>
+      <div className="px-5 pt-1 pb-4">
+        <FormText name="summary.name" placeholder="Tên cửa hàng..." clearable={true} />
       </div>
 
       <div
