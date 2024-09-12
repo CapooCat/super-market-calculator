@@ -21,7 +21,6 @@ interface IItem extends IFieldArray {
 interface ISummary {
   lowest: IItem | null;
   highest: IItem | null;
-  most: IItem | null;
   date: string | null;
   total: {
     price: number;
@@ -38,12 +37,10 @@ const OverlaySummary = () => {
     (result: ISummary, current: IFieldArray, index) => {
       result.lowest = result.lowest ?? { ...current, index };
       result.highest = result.highest ?? { ...current, index };
-      result.most = result.most ?? { ...current, index };
       result.date = result.date ?? current.date;
 
       if (current.price < result.lowest.price * result.lowest.quantity) result.lowest = { ...current, index };
       if (current.price > result.highest.price * result.highest.quantity) result.highest = { ...current, index };
-      if (current.quantity > result.most.quantity) result.most = { ...current, index };
       if (dayjs(result.date).isAfter(current.date)) result.date = dayjs(current.date).toISOString();
 
       result.total.price += current.price;
@@ -55,7 +52,6 @@ const OverlaySummary = () => {
     {
       lowest: null,
       highest: null,
-      most: null,
       date: null,
       total: {
         price: 0,
@@ -96,7 +92,6 @@ const OverlaySummary = () => {
             <div className="flex gap-2 pt-1">
               {summary.highest?.index == index && <Tag value="Cao nhất" severity="danger" />}
               {summary.lowest?.index == index && <Tag value="Thấp nhất" severity="success" />}
-              {summary.most?.index == index && <Tag value="Nhiều nhất" />}
             </div>
           </div>
         </div>
