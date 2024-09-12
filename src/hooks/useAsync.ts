@@ -26,7 +26,7 @@ const useAsync = <T>(asyncFunction: (...args: any[]) => Promise<T>, dependencies
         setIsLoading(false);
       }
     },
-    [asyncFunction, ...dependencies]
+    [asyncFunction, ...dependencies],
   );
 
   return { isLoading, data, error, execute };

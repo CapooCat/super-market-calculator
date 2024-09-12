@@ -1,8 +1,9 @@
+import { IconX } from "@tabler/icons-react";
+import { Button } from "primereact/button";
 import React from "react";
+
 import FormImage from "./FormInput/FormImage";
 import FormNumber from "./FormInput/FormNumber";
-import { Button } from "primereact/button";
-import { IconX } from "@tabler/icons-react";
 import FormTotal from "./FormInput/FormTotal";
 
 const Item = ({ name, index, onRemoveClick }: any) => {

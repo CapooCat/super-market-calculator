@@ -1,12 +1,13 @@
-import React from "react";
 import { PrimeReactProvider } from "primereact/api";
+import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import Form from "@/components/Form";
+
 import Footer from "@/components/Footer";
+import Form from "@/components/Form";
 import Header from "@/components/Header";
 import PrimeReactConfig from "@/config/primeReact.config";
-import { FormArrayProvider } from "@/context/FormArrayContext";
 import { CameraProvider } from "@/context/CameraContext";
+import { FormArrayProvider } from "@/context/FormArrayContext";
 import { FormStorageProvider } from "@/context/FormStorageContext";
 import useLocalStorage from "@/hooks/useLocalStorage";
 

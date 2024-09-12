@@ -1,8 +1,9 @@
+import { Dialog } from "primereact/dialog";
+import React, { createContext, useContext, useState } from "react";
+
 import OverlayCamera from "@/components/OverlayCamera";
 import useCamera, { IPhoto } from "@/hooks/useCamera";
 import useOverlayParam from "@/hooks/useOverlayParam";
-import { Dialog } from "primereact/dialog";
-import React, { createContext, useContext, useState } from "react";
 
 interface ICameraContext {
   handleCamera: (formInputName: string) => void;

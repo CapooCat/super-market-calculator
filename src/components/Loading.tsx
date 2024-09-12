@@ -1,5 +1,6 @@
 import { IconLoader2 } from "@tabler/icons-react";
 import React from "react";
+
 const Loading = () => {
   return (
     <div className="w-[inherit] h-[inherit] flex justify-center items-center text-white">

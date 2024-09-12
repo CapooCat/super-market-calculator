@@ -1,9 +1,10 @@
-import React from "react";
-import { useFormArray } from "@/context/FormArrayContext";
 import { Button } from "primereact/button";
-import FormNumber from "./FormInput/FormNumber";
+import React from "react";
 import { useFormContext } from "react-hook-form";
+
 import FormImage from "./FormInput/FormImage";
+import FormNumber from "./FormInput/FormNumber";
+import { useFormArray } from "@/context/FormArrayContext";
 
 const OverlayAddItem = ({ onConfirmClick }) => {
   const { getValues, setValue } = useFormContext();

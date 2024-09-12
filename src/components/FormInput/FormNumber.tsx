@@ -1,8 +1,8 @@
+import { IconMinus, IconPlus } from "@tabler/icons-react";
+import { Button } from "primereact/button";
+import { InputNumber, InputNumberProps } from "primereact/inputnumber";
 import React, { useMemo, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { InputNumber, InputNumberProps } from "primereact/inputnumber";
-import { Button } from "primereact/button";
-import { IconMinus, IconPlus } from "@tabler/icons-react";
 
 interface IFieldInput extends InputNumberProps {
   name: string;
@@ -82,7 +82,7 @@ const FormNumber = (props: IFieldInput) => {
               )}
             </div>
           ),
-          [name, value, invalid, error]
+          [name, value, invalid, error],
         );
       }}
     />

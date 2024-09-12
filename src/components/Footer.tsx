@@ -1,7 +1,8 @@
 import React from "react";
+
 import ButtonAddItem from "./ButtonAddItem";
-import ButtonSummary from "./ButtonSummary";
 import ButtonOnlineShopping from "./ButtonOnlineShopping";
+import ButtonSummary from "./ButtonSummary";
 
 const Footer = () => {
   return (

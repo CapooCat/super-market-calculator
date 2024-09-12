@@ -1,6 +1,7 @@
-import React, { useMemo, useRef } from "react";
 import { InputText, InputTextProps } from "primereact/inputtext";
+import React, { useMemo, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+
 interface IFieldInput extends InputTextProps {
   name: string;
 }
@@ -20,7 +21,7 @@ const FormText = (props: IFieldInput) => {
 
         return useMemo(
           () => <InputText {...field} {...props} ref={input} invalid={invalid} value={value ?? ""} />,
-          [name, value, invalid, error]
+          [name, value, invalid, error],
         );
       }}
     />
