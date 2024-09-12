@@ -123,7 +123,7 @@ const OverlaySummary = () => {
           <Label title="Tổng tiền:" value={formatCurrency(summary.total.price)} />
           <Label title="Tổng sản phẩm:" value={summary.total.quantity} />
           <Label title="Tổng số lượng:" value={summary.total.item} />
-          <Label title="Ngày tạo:" value={dayjs(summary.date).format("DD/MM/YYYY HH:mm")} />
+          <Label title="Ngày tổng kết:" value={dayjs(summary.date).format("DD/MM/YYYY HH:mm")} />
         </div>
 
         <ul className="pt-4">
