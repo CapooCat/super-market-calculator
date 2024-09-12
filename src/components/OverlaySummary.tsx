@@ -1,4 +1,4 @@
-import { IconPhoto } from "@tabler/icons-react";
+import { IconPhoto, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import download from "downloadjs";
 import { toPng } from "html-to-image";
@@ -8,6 +8,8 @@ import { classNames } from "primereact/utils";
 import React, { useRef } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
+import FormLabel from "./FormInput/FormLabel";
+import FormText from "./FormInput/FormText";
 import Label from "./Label";
 import { IFieldArray } from "@/models/IFieldArray";
 import formatCurrency from "@/utils/formatCurrency";
@@ -29,7 +31,7 @@ interface ISummary {
 }
 
 const OverlaySummary = () => {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
   const printComponent = useRef(null);
   const fields: IFieldArray[] = useWatch({ control, name: "fieldArray" });
   const summary: ISummary = fields.reduce(
@@ -102,6 +104,10 @@ const OverlaySummary = () => {
     );
   };
 
+  const handleClearName = () => {
+    setValue("summary.name", "");
+  };
+
   const handlePrint = () => {
     if (printComponent.current)
       toPng(printComponent.current, {
@@ -110,11 +116,19 @@ const OverlaySummary = () => {
       }).then(function (dataUrl) {
         const date = dayjs().format("DD/MM/YYYY_hh:mm:ss");
         download(dataUrl, `hoa-don-${date}.png`);
+        handleClearName();
       });
   };
 
   return (
     <>
+      <div className="flex gap-2 px-5 pb-4">
+        <FormText name="summary.name" placeholder="Tên cửa hàng..." />
+        <Button className="flex justify-center w-11" severity="danger" onClick={handleClearName}>
+          <IconX size={18} />
+        </Button>
+      </div>
+
       <div
         className="flex flex-col px-6 pb-12 divide-y-2 divide-gray-700 bg-inherit divide-dashed"
         ref={printComponent}
@@ -124,6 +138,7 @@ const OverlaySummary = () => {
           <Label title="Tổng sản phẩm:" value={summary.total.quantity} />
           <Label title="Tổng số lượng:" value={summary.total.item} />
           <Label title="Ngày tổng kết:" value={dayjs(summary.date).format("DD/MM/YYYY HH:mm")} />
+          <FormLabel title="Tên cửa hàng:" name="summary.name" />
         </div>
 
         <ul className="pt-4">
@@ -134,7 +149,7 @@ const OverlaySummary = () => {
         </ul>
       </div>
 
-      <div className="sticky bottom-0 px-6 -translate-y-6">
+      <div className="sticky bottom-0 px-6">
         <Button className="justify-center w-full text-xl" onClick={handlePrint}>
           Lưu hoá đơn
         </Button>

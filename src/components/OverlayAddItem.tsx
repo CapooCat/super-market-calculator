@@ -12,22 +12,22 @@ const OverlayAddItem = ({ onConfirmClick }) => {
   const { append } = useFormArray();
 
   const handleOnConfirm = () => {
-    const [inputImage, inputPrice] = getValues(["input.image", "input.price"]);
+    const [inputImage, inputPrice] = getValues(["item.image", "item.price"]);
     append({ image: inputImage, price: inputPrice, quantity: 1, date: dayjs().toISOString() });
-    setValue("input", { image: null, price: null });
+    setValue("item", { image: null, price: null });
     onConfirmClick();
   };
 
   return (
     <section className="flex flex-col items-center gap-6 mb-10">
       <div className="w-[50%]">
-        <FormImage title="Thêm ảnh sản phẩm" name="input.image" />
+        <FormImage title="Thêm ảnh sản phẩm" name="item.image" />
       </div>
 
       <div className="flex flex-col w-full gap-1">
         Giá tiền:
         <FormNumber
-          name="input.price"
+          name="item.price"
           min={0}
           minFractionDigits={0}
           maxFractionDigits={3}
