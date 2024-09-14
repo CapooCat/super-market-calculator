@@ -17,6 +17,11 @@ const PrimeReactConfig: object = {
     tag: {
       root: "p-0 px-2 text-sm w-fit font-normal line-clamp-1",
     },
+    confirmpopup: {
+      content: "p-4",
+      footer: "p-4 pt-0 grid grid-cols-2",
+      message: "m-0",
+    },
   },
 };
 

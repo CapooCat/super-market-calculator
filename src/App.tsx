@@ -1,4 +1,5 @@
 import { PrimeReactProvider } from "primereact/api";
+import { ConfirmPopup } from "primereact/confirmpopup";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -28,6 +29,11 @@ function App() {
               <Header />
               <Form />
               <Footer />
+              <ConfirmPopup
+                pt={{
+                  rejectButton: { root: () => "border border-[#60a5fa]" },
+                }}
+              />
             </CameraProvider>
           </PrimeReactProvider>
         </FormStorageProvider>
