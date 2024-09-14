@@ -5,9 +5,16 @@ import React from "react";
 
 import OverlayAddItem from "./OverlayAddItem";
 import useOverlayParam from "@/hooks/useOverlayParam";
+import useScroll from "@/hooks/useScroll";
 
 const ButtonAddItem = () => {
   const { isThisOverlay, showOverlay } = useOverlayParam("addItem");
+  const { scrollToBottom } = useScroll();
+
+  const handleOnConfirm = () => {
+    showOverlay(false);
+    scrollToBottom();
+  };
 
   return (
     <>
@@ -26,7 +33,7 @@ const ButtonAddItem = () => {
         dismissableMask
         onHide={() => showOverlay(false)}
       >
-        <OverlayAddItem onConfirmClick={() => showOverlay(false)} />
+        <OverlayAddItem onConfirmClick={handleOnConfirm} />
       </Dialog>
     </>
   );

@@ -10,7 +10,7 @@ interface IFieldInput extends InputNumberProps {
   onPressEnter?: () => void;
 }
 
-const FormNumber = ({ ...props }: IFieldInput) => {
+const FormNumber = ({ quickComplete = false, onPressEnter = () => {}, ...props }: IFieldInput) => {
   const { control, setValue } = useFormContext();
   const input = useRef(null);
 
@@ -45,14 +45,14 @@ const FormNumber = ({ ...props }: IFieldInput) => {
 
         const handleOnChange = (e) => {
           const regex = /000$/;
-          if (props.quickComplete && !regex.test(e.value)) onChange(e.value * 1000);
+          if (quickComplete && !regex.test(e.value)) onChange(e.value * 1000);
           else onChange(e.value);
         };
 
         const handleKeyDown = (e) => {
           if (e.key === "Enter") {
             e.target.blur();
-            setTimeout(() => props.onPressEnter && props.onPressEnter(), 100);
+            setTimeout(() => onPressEnter && onPressEnter(), 100);
           }
         };
 
