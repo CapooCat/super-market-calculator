@@ -14,15 +14,7 @@ const Item = ({ name, index, onRemoveClick }: any) => {
       </div>
 
       <div className="flex flex-col flex-1 gap-4">
-        <FormNumber
-          name={`${name}.price`}
-          min={0}
-          minFractionDigits={0}
-          maxFractionDigits={3}
-          extend={{
-            quickComplete: true,
-          }}
-        />
+        <FormNumber name={`${name}.price`} min={0} minFractionDigits={0} maxFractionDigits={3} quickComplete={true} />
         <FormNumber name={`${name}.quantity`} showButtons buttonLayout="horizontal" min={1} />
         <div className="flex flex-wrap gap-1 px-4 py-1 rounded-lg bg-black/50 w-fit">
           Tổng:
