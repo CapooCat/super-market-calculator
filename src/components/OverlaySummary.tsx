@@ -7,10 +7,13 @@ import { Tag } from "primereact/tag";
 import { classNames } from "primereact/utils";
 import React, { useRef } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 import FormLabel from "./FormInput/FormLabel";
 import FormText from "./FormInput/FormText";
 import Label from "./Label";
+import Loading from "./Loading";
+import useAsync from "@/hooks/useAsync";
 import { IFieldArray } from "@/models/IFieldArray";
 import formatCurrency from "@/utils/formatCurrency";
 
@@ -32,8 +35,10 @@ interface ISummary {
 
 const OverlaySummary = () => {
   const { control, setValue } = useFormContext();
+  const navigate = useNavigate();
   const printComponent = useRef(null);
   const fields: IFieldArray[] = useWatch({ control, name: "fieldArray" });
+
   const summary: ISummary = fields.reduce(
     (result: ISummary, current: IFieldArray, index) => {
       result.lowest = result.lowest ?? { ...current, index };
@@ -107,20 +112,28 @@ const OverlaySummary = () => {
     setValue("summary.name", "");
   };
 
-  const handlePrint = () => {
-    if (printComponent.current)
-      toPng(printComponent.current, {
+  const handlePrint = useAsync(async () => {
+    if (printComponent.current) {
+      const dataUrl = await toPng(printComponent.current, {
         quality: 0.8,
         style: { paddingTop: "1.5rem" },
-      }).then(function (dataUrl) {
-        const date = dayjs().format("DD/MM/YYYY_hh:mm:ss");
-        download(dataUrl, `hoa-don-${date}.png`);
-        handleClearName();
       });
-  };
+
+      const date = dayjs().format("DD/MM/YYYY_hh:mm:ss");
+      download(dataUrl, `hoa-don-${date}.png`);
+      handleClearName();
+      navigate(-1);
+    }
+  });
 
   return (
     <>
+      {handlePrint.isLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl backdrop-blur-sm bg-black/50">
+          <Loading />
+        </div>
+      )}
+
       <div className="px-5 pt-1 pb-4">
         <FormText name="summary.name" placeholder="Tên cửa hàng..." clearable={true} />
       </div>
@@ -147,7 +160,10 @@ const OverlaySummary = () => {
       </div>
 
       <div className="sticky bottom-0 px-6 -translate-y-10">
-        <Button className="justify-center w-full text-xl border-2 border-black/50" onClick={handlePrint}>
+        <Button
+          className="justify-center w-full text-xl border-2 border-black/50"
+          onClick={() => handlePrint.execute()}
+        >
           Lưu hoá đơn
         </Button>
       </div>
