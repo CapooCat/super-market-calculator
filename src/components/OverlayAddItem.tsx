@@ -44,7 +44,6 @@ const OverlayAddItem = () => {
           maxFractionDigits={3}
           quickComplete={true}
           onPressEnter={() => handleOnConfirm()}
-          autoFocus={true}
         />
       </div>
 

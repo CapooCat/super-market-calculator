@@ -3,6 +3,8 @@ import { classNames } from "primereact/utils";
 import React, { useMemo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
+import { usePreviousFocus } from "@/hooks/usePreviousFocus";
+
 interface IFieldInput extends Omit<InputSwitchProps, "checked"> {
   name: string;
   checked?: boolean;
@@ -11,6 +13,7 @@ interface IFieldInput extends Omit<InputSwitchProps, "checked"> {
 
 const FormSwitch = ({ label, ...props }: IFieldInput) => {
   const { control } = useFormContext();
+  const { focusPrevious } = usePreviousFocus();
 
   return (
     <Controller
@@ -26,6 +29,11 @@ const FormSwitch = ({ label, ...props }: IFieldInput) => {
           "text-white": value,
         });
 
+        const handleOnChange = (e) => {
+          onChange(e.value);
+          focusPrevious();
+        };
+
         return useMemo(
           () => (
             <div className="flex items-center gap-2">
@@ -34,7 +42,7 @@ const FormSwitch = ({ label, ...props }: IFieldInput) => {
                 {...props}
                 invalid={invalid}
                 checked={value}
-                onChange={onChange}
+                onChange={handleOnChange}
                 disabled={false}
                 onBlur={onBlur}
               />

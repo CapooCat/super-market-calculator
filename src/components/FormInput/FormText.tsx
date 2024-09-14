@@ -1,9 +1,10 @@
 import { IconX } from "@tabler/icons-react";
 import { Button } from "primereact/button";
-import { useClickOutside } from "primereact/hooks";
 import { InputText, InputTextProps } from "primereact/inputtext";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+
+import { usePreviousFocus } from "@/hooks/usePreviousFocus";
 
 interface IFieldInput extends InputTextProps {
   name: string;
@@ -11,10 +12,9 @@ interface IFieldInput extends InputTextProps {
 }
 
 const FormText = ({ clearable = true, ...props }: IFieldInput) => {
-  const [isLastFocus, setIsLastFocus] = useState(false);
+  const { focusPrevious } = usePreviousFocus();
   const { control, setValue } = useFormContext();
   const input = useRef(null);
-  const container = useRef(null);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -22,13 +22,8 @@ const FormText = ({ clearable = true, ...props }: IFieldInput) => {
     }
   };
 
-  useClickOutside(container, () => {
-    setIsLastFocus(false);
-  });
-
   const handleClearInput = () => {
-    const element: any = input.current;
-    isLastFocus && element.focus();
+    focusPrevious();
     setValue(props.name, "");
   };
 
@@ -43,7 +38,7 @@ const FormText = ({ clearable = true, ...props }: IFieldInput) => {
 
         return useMemo(
           () => (
-            <div className="flex w-full gap-2" ref={container}>
+            <div className="flex w-full gap-2">
               <InputText
                 {...props}
                 ref={input}
@@ -52,7 +47,6 @@ const FormText = ({ clearable = true, ...props }: IFieldInput) => {
                 onKeyDown={handleKeyDown}
                 onChange={onChange}
                 onBlur={onBlur}
-                onFocus={() => setIsLastFocus(true)}
               />
               {clearable && (
                 <Button className="flex justify-center w-11" severity="danger" onClick={handleClearInput}>
@@ -61,7 +55,7 @@ const FormText = ({ clearable = true, ...props }: IFieldInput) => {
               )}
             </div>
           ),
-          [name, value, invalid, error, isLastFocus],
+          [name, value, invalid, error],
         );
       }}
     />
