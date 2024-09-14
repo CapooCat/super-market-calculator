@@ -31,7 +31,7 @@ function App() {
               <Footer />
               <ConfirmPopup
                 pt={{
-                  rejectButton: { root: () => "border border-[#60a5fa]" },
+                  rejectButton: { root: () => "border border-[#60a5fa] m-0" },
                 }}
               />
             </CameraProvider>
