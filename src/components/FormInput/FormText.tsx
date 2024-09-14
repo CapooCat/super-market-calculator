@@ -38,19 +38,20 @@ const FormText = ({ clearable = true, ...props }: IFieldInput) => {
       control={control}
       defaultValue=""
       render={({ field, fieldState }) => {
-        const { value, name } = field;
+        const { name, value, onBlur, onChange } = field;
         const { invalid, error } = fieldState;
 
         return useMemo(
           () => (
             <div className="flex w-full gap-2" ref={container}>
               <InputText
-                {...field}
                 {...props}
                 ref={input}
                 invalid={invalid}
                 value={value ?? ""}
                 onKeyDown={handleKeyDown}
+                onChange={onChange}
+                onBlur={onBlur}
                 onFocus={() => setIsLastFocus(true)}
               />
               {clearable && (

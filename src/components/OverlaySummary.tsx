@@ -21,7 +21,8 @@ interface IItem extends IFieldArray {
 interface ISummary {
   lowest: IItem | null;
   highest: IItem | null;
-  date: string | null;
+  createdAt: string | null;
+  summarizeAt: string | null;
   total: {
     price: number;
     quantity: number;
@@ -37,11 +38,13 @@ const OverlaySummary = () => {
     (result: ISummary, current: IFieldArray, index) => {
       result.lowest = result.lowest ?? { ...current, index };
       result.highest = result.highest ?? { ...current, index };
-      result.date = result.date ?? current.date;
+      result.createdAt = result.createdAt ?? current.date;
+      result.summarizeAt = result.summarizeAt ?? current.date;
 
       if (current.price < result.lowest.price * result.lowest.quantity) result.lowest = { ...current, index };
       if (current.price > result.highest.price * result.highest.quantity) result.highest = { ...current, index };
-      if (dayjs(result.date).isAfter(current.date)) result.date = dayjs(current.date).toISOString();
+      if (dayjs(current.date).isAfter(result.summarizeAt)) result.summarizeAt = dayjs(current.date).toISOString();
+      if (dayjs(current.date).isBefore(result.createdAt)) result.createdAt = dayjs(current.date).toISOString();
 
       result.total.price += current.price;
       result.total.quantity += current.quantity;
@@ -52,7 +55,8 @@ const OverlaySummary = () => {
     {
       lowest: null,
       highest: null,
-      date: null,
+      createdAt: null,
+      summarizeAt: null,
       total: {
         price: 0,
         quantity: 0,
@@ -107,7 +111,7 @@ const OverlaySummary = () => {
     if (printComponent.current)
       toPng(printComponent.current, {
         quality: 0.8,
-        style: { borderRadius: "0.75rem", paddingTop: "1.5rem" },
+        style: { paddingTop: "1.5rem" },
       }).then(function (dataUrl) {
         const date = dayjs().format("DD/MM/YYYY_hh:mm:ss");
         download(dataUrl, `hoa-don-${date}.png`);
@@ -122,14 +126,15 @@ const OverlaySummary = () => {
       </div>
 
       <div
-        className="flex flex-col px-6 pb-12 divide-y-2 divide-gray-700 bg-inherit divide-dashed"
+        className="flex flex-col px-6 pb-12 mb-2 divide-y-2 divide-gray-700 bg-inherit divide-dashed"
         ref={printComponent}
       >
         <div className="flex flex-col gap-2 pb-4">
           <Label title="Tổng tiền:" value={formatCurrency(summary.total.price)} />
           <Label title="Tổng sản phẩm:" value={summary.total.quantity} />
           <Label title="Tổng số lượng:" value={summary.total.item} />
-          <Label title="Ngày tổng kết:" value={dayjs(summary.date).format("DD/MM/YYYY HH:mm")} />
+          <Label title="Ngày tạo:" value={dayjs(summary.createdAt).format("DD/MM/YYYY HH:mm")} />
+          <Label title="Ngày tổng kết:" value={dayjs(summary.summarizeAt).format("DD/MM/YYYY HH:mm")} />
           <FormLabel title="Tên cửa hàng:" name="summary.name" />
         </div>
 
@@ -141,8 +146,8 @@ const OverlaySummary = () => {
         </ul>
       </div>
 
-      <div className="sticky bottom-0 px-6">
-        <Button className="justify-center w-full text-xl" onClick={handlePrint}>
+      <div className="sticky bottom-0 px-6 -translate-y-10">
+        <Button className="justify-center w-full text-xl border-2 border-black/50" onClick={handlePrint}>
           Lưu hoá đơn
         </Button>
       </div>

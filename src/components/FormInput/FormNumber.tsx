@@ -6,10 +6,8 @@ import { Controller, useFormContext } from "react-hook-form";
 
 interface IFieldInput extends InputNumberProps {
   name: string;
-  extend?: {
-    quickComplete?: boolean;
-    onPressEnter?: () => void;
-  };
+  quickComplete?: boolean;
+  onPressEnter?: () => void;
 }
 
 const FormNumber = ({ ...props }: IFieldInput) => {
@@ -47,15 +45,14 @@ const FormNumber = ({ ...props }: IFieldInput) => {
 
         const handleOnChange = (e) => {
           const regex = /000$/;
-
-          if (props.extend?.quickComplete && !regex.test(e.value)) onChange(e.value * 1000);
+          if (props.quickComplete && !regex.test(e.value)) onChange(e.value * 1000);
           else onChange(e.value);
         };
 
         const handleKeyDown = (e) => {
           if (e.key === "Enter") {
             e.target.blur();
-            setTimeout(() => props.extend?.onPressEnter && props.extend?.onPressEnter(), 100);
+            setTimeout(() => props.onPressEnter && props.onPressEnter(), 100);
           }
         };
 

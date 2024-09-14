@@ -31,14 +31,16 @@ const OverlayAddItem = ({ onConfirmClick }) => {
           min={0}
           minFractionDigits={0}
           maxFractionDigits={3}
-          extend={{
-            quickComplete: true,
-            onPressEnter: () => handleOnConfirm(),
-          }}
+          quickComplete={true}
+          onPressEnter={() => handleOnConfirm()}
+          autoFocus={true}
         />
       </div>
 
-      <Button className="justify-center w-full mt-4 text-xl font-medium" onClick={handleOnConfirm}>
+      <Button
+        className="justify-center w-full mt-4 text-xl font-medium border-2 border-black/50"
+        onClick={handleOnConfirm}
+      >
         Thêm sản phẩm
       </Button>
     </section>
