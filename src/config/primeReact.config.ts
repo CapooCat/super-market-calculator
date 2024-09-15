@@ -20,7 +20,7 @@ const PrimeReactConfig: object = {
     confirmpopup: {
       root: "w-[220px] !left-auto right-2",
       content: "p-4 max-w-[90vw] text-center justify-center",
-      footer: "p-4 pt-0 grid gap-2",
+      footer: "p-4 pt-0 flex flex-col flex-col-reverse gap-2 ",
       message: "m-0",
     },
   },
