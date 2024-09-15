@@ -51,7 +51,7 @@ const OverlaySummary = () => {
       if (dayjs(current.date).isAfter(result.summarizeAt)) result.summarizeAt = dayjs(current.date).toISOString();
       if (dayjs(current.date).isBefore(result.createdAt)) result.createdAt = dayjs(current.date).toISOString();
 
-      result.total.price += current.price;
+      result.total.price += current.price * current.quantity;
       result.total.quantity += current.quantity;
       result.total.item += 1;
 
@@ -125,6 +125,8 @@ const OverlaySummary = () => {
       navigate(-1);
     }
   });
+
+  if (!fields.length) return <div className="px-6">Chưa có sản phẩm nào, vui lòng thêm ít nhất 1 sản phẩm</div>;
 
   return (
     <>

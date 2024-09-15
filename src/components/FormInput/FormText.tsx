@@ -8,10 +8,10 @@ import { usePreviousFocus } from "@/hooks/usePreviousFocus";
 
 interface IFieldInput extends InputTextProps {
   name: string;
-  clearable: boolean;
+  clearable?: boolean;
 }
 
-const FormText = ({ clearable = true, ...props }: IFieldInput) => {
+const FormText = ({ clearable = false, ...props }: IFieldInput) => {
   const { focusPrevious } = usePreviousFocus();
   const { control, setValue } = useFormContext();
   const input = useRef(null);
