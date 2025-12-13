@@ -1,11 +1,9 @@
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext } from "react";
 import React from "react";
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
-
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { FieldValues, useFieldArray, useFormContext } from "react-hook-form";
 
 interface IFieldArray {
-  fields: any;
+  fields: FieldValues[];
   name?: string;
   append: (obj: object | object[]) => void;
   prepend: (obj: object | object[]) => void;

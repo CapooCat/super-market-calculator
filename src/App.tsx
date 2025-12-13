@@ -13,7 +13,7 @@ import { FormStorageProvider } from "@/context/FormStorageContext";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 function App() {
-  let [fieldArray] = useLocalStorage([], "fieldArrayStore");
+  const [fieldArray] = useLocalStorage([], "fieldArrayStore");
   const methods = useForm({
     defaultValues: {
       fieldArray,

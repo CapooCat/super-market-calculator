@@ -8,7 +8,7 @@ export interface IUseCamera {
   isCameraActive: boolean;
   photo?: IPhoto;
   clearPhoto: () => void;
-  startCamera: () => Promise<void>;
+  startCamera: () => void;
   takePhoto: () => void;
   stopCamera: () => void;
 }
@@ -23,7 +23,7 @@ export interface IBlob {
   url?: string;
 }
 
-let stream: any;
+let stream: MediaStream | null = null;
 
 const useCamera = (): IUseCamera => {
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -43,16 +43,19 @@ const useCamera = (): IUseCamera => {
       }
 
       setIsCameraActive(true);
-      return stream;
-    } catch {}
+    } catch {
+      // Camera access denied or not available
+    }
   }, 100);
 
   const stopCamera = debounce(async () => {
     try {
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
+      const tracks = stream?.getTracks();
+      tracks?.forEach((track) => track.stop());
       setIsCameraActive(false);
-    } catch {}
+    } catch {
+      // Stream already stopped or not available
+    }
   }, 100);
 
   const processToBase64 = (canvas: HTMLCanvasElement): string | undefined => {

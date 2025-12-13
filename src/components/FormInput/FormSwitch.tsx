@@ -1,6 +1,6 @@
-import { InputSwitch, InputSwitchProps } from "primereact/inputswitch";
+import { InputSwitch, InputSwitchChangeEvent, InputSwitchProps } from "primereact/inputswitch";
 import { classNames } from "primereact/utils";
-import React, { useMemo } from "react";
+import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 import { usePreviousFocus } from "@/hooks/usePreviousFocus";
@@ -21,34 +21,31 @@ const FormSwitch = ({ label, ...props }: IFieldInput) => {
       control={control}
       defaultValue={false}
       render={({ field, fieldState }) => {
-        const { name, value, onBlur, onChange } = field;
-        const { invalid, error } = fieldState;
+        const { value, onBlur, onChange } = field;
+        const { invalid } = fieldState;
 
         const cn_label = classNames("transition-all", {
           "text-gray-500": !value,
           "text-white": value,
         });
 
-        const handleOnChange = (e) => {
+        const handleOnChange = (e: InputSwitchChangeEvent) => {
           onChange(e.value);
           focusPrevious();
         };
 
-        return useMemo(
-          () => (
-            <div className="flex items-center gap-2">
-              {label && <span className={cn_label}>{label}</span>}
-              <InputSwitch
-                {...props}
-                invalid={invalid}
-                checked={value}
-                onChange={handleOnChange}
-                disabled={false}
-                onBlur={onBlur}
-              />
-            </div>
-          ),
-          [name, value, invalid, error],
+        return (
+          <div className="flex items-center gap-2">
+            {label && <span className={cn_label}>{label}</span>}
+            <InputSwitch
+              {...props}
+              invalid={invalid}
+              checked={value}
+              onChange={handleOnChange}
+              disabled={false}
+              onBlur={onBlur}
+            />
+          </div>
         );
       }}
     />

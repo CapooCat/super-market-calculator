@@ -1,4 +1,4 @@
-import { IconPhoto, IconX } from "@tabler/icons-react";
+import { IconPhoto } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import download from "downloadjs";
 import { toPng } from "html-to-image";

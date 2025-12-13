@@ -1,7 +1,7 @@
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { Button } from "primereact/button";
-import { InputNumber, InputNumberProps } from "primereact/inputnumber";
-import React, { useMemo, useRef } from "react";
+import { InputNumber, InputNumberProps, InputNumberValueChangeEvent } from "primereact/inputnumber";
+import React, { useRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface IFieldInput extends InputNumberProps {
@@ -26,12 +26,16 @@ const FormNumber = ({ quickComplete = false, onPressEnter = () => {}, ...props }
 
   const handlePlusValue = (value: number, name: string) => {
     const plusValue = value + 1;
-    isAtMax(plusValue) || setValue(name, plusValue);
+    if (!isAtMax(plusValue)) {
+      setValue(name, plusValue);
+    }
   };
 
   const handleMinusValue = (value: number, name: string) => {
     const minusValue = value - 1;
-    isAtMin(minusValue) || setValue(name, minusValue);
+    if (!isAtMin(minusValue)) {
+      setValue(name, minusValue);
+    }
   };
 
   return (
@@ -41,45 +45,42 @@ const FormNumber = ({ quickComplete = false, onPressEnter = () => {}, ...props }
       defaultValue={0}
       render={({ field, fieldState }) => {
         const { name, value, onBlur, onChange } = field;
-        const { invalid, error } = fieldState;
+        const { invalid } = fieldState;
 
-        const handleOnChange = (e) => {
+        const handleOnChange = (e: InputNumberValueChangeEvent) => {
           const regex = /000$/;
-          if (quickComplete && !regex.test(e.value)) onChange(e.value * 1000);
+          if (quickComplete && !regex.test(String(e.value))) onChange((e.value ?? 0) * 1000);
           else onChange(e.value);
         };
 
-        const handleKeyDown = (e) => {
+        const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
-            e.target.blur();
+            (e.target as HTMLInputElement).blur();
             setTimeout(() => onPressEnter && onPressEnter(), 100);
           }
         };
 
-        return useMemo(
-          () => (
-            <div className="flex gap-2">
-              {props.showButtons && (
-                <Button icon={<IconMinus size={16} />} onClick={() => handleMinusValue(value, name)} />
-              )}
-              <InputNumber
-                {...props}
-                inputRef={input}
-                id={name}
-                value={value ?? 0}
-                onFocus={(e) => e.target.select()}
-                onValueChange={(e) => handleOnChange(e)}
-                onKeyDown={(e) => handleKeyDown(e)}
-                showButtons={false}
-                onBlur={onBlur}
-                invalid={invalid}
-              />
-              {props.showButtons && (
-                <Button icon={<IconPlus size={16} />} onClick={() => handlePlusValue(value, name)} />
-              )}
-            </div>
-          ),
-          [name, value, invalid, error],
+        return (
+          <div className="flex gap-2">
+            {props.showButtons && (
+              <Button icon={<IconMinus size={16} />} onClick={() => handleMinusValue(value, name)} />
+            )}
+            <InputNumber
+              {...props}
+              inputRef={input}
+              id={name}
+              value={value ?? 0}
+              onFocus={(e) => e.target.select()}
+              onValueChange={(e) => handleOnChange(e)}
+              onKeyDown={(e) => handleKeyDown(e)}
+              showButtons={false}
+              onBlur={onBlur}
+              invalid={invalid}
+            />
+            {props.showButtons && (
+              <Button icon={<IconPlus size={16} />} onClick={() => handlePlusValue(value, name)} />
+            )}
+          </div>
         );
       }}
     />

@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const useOverlayParam = (thisOverlay: string) => {
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const openOverlay = searchParams.get("overlay");
   const navigate = useNavigate();
   const isThisOverlay = openOverlay === thisOverlay;

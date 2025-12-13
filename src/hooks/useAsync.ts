@@ -1,19 +1,22 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
-interface IHookOutput<T> {
+interface IHookOutput<T, Args extends unknown[]> {
   isLoading: boolean;
   data: T | null;
   error: Error | null;
-  execute: (...args: any[]) => Promise<void>;
+  execute: (...args: Args) => Promise<void>;
 }
 
-const useAsync = <T>(asyncFunction: (...args: any[]) => Promise<T>, dependencies: any[] = []): IHookOutput<T> => {
+const useAsync = <T, Args extends unknown[] = unknown[]>(
+  asyncFunction: (...args: Args) => Promise<T>,
+  dependencies: React.DependencyList = [],
+): IHookOutput<T, Args> => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   const execute = useCallback(
-    async (...args: any[]) => {
+    async (...args: Args) => {
       setIsLoading(true);
       setData(null);
       setError(null);
@@ -26,6 +29,7 @@ const useAsync = <T>(asyncFunction: (...args: any[]) => Promise<T>, dependencies
         setIsLoading(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [asyncFunction, ...dependencies],
   );
 

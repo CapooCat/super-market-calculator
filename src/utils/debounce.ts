@@ -1,9 +1,9 @@
-type DebounceFunction = (...args: any[]) => void;
+type DebounceFunction = (...args: unknown[]) => void;
 
 function debounce<F extends DebounceFunction>(func: F, delay: number): F {
-  let timeoutId: any = null;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  return function (this: any, ...args: any[]) {
+  return function (this: unknown, ...args: unknown[]) {
     if (timeoutId) {
       clearTimeout(timeoutId);
     }

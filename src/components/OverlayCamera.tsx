@@ -11,7 +11,11 @@ import Loading from "./Loading";
 import useCamera from "@/hooks/useCamera";
 import compressImage from "@/utils/compressImage";
 
-const OverlayCamera = ({ fieldName }) => {
+interface IOverlayCameraProps {
+  fieldName: string;
+}
+
+const OverlayCamera = ({ fieldName }: IOverlayCameraProps) => {
   const { setValue } = useFormContext();
   const { videoRef, canvasRef, photo, clearPhoto, startCamera, takePhoto, stopCamera } = useCamera();
   const compress = useAsync((blob: Blob) => compressImage(blob), []);
@@ -23,6 +27,7 @@ const OverlayCamera = ({ fieldName }) => {
       clearPhoto();
       stopCamera();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -31,6 +36,7 @@ const OverlayCamera = ({ fieldName }) => {
       stopCamera();
       navigate(-1);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [compress.data]);
 
   const takenPhotoLayout = classNames("relative flex flex-col items-center w-full gap-16", {

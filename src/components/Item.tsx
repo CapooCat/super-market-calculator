@@ -7,12 +7,18 @@ import FormImage from "./FormInput/FormImage";
 import FormNumber from "./FormInput/FormNumber";
 import FormTotal from "./FormInput/FormTotal";
 
-const Item = ({ name, index, onRemoveClick }: any) => {
+interface IItemProps {
+  name: string;
+  index: number;
+  onRemoveClick: () => void;
+}
+
+const Item = ({ name, index, onRemoveClick }: IItemProps) => {
   const accept = () => {
     onRemoveClick();
   };
 
-  const handleRemoveClick = (e) => {
+  const handleRemoveClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     confirmPopup({
       target: e.currentTarget,
       message: "Bạn có chắc là muốn xoá ?",

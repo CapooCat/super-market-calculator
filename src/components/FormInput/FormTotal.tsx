@@ -45,12 +45,17 @@ const FormTotal = memo(function ({ priceField, quantityField }: ITotal) {
     const newTotal = (price ?? 0) * quantity;
     totalToastRef.current?.classList.remove("animation-toast");
     if (total != null) {
-      newTotal > total && setTotalStatus({ type: "isIncrease", byAmount: newTotal - total });
-      newTotal < total && setTotalStatus({ type: "isDecrease", byAmount: total - newTotal });
-      newTotal == total && setTotalStatus(null);
+      if (newTotal > total) {
+        setTotalStatus({ type: "isIncrease", byAmount: newTotal - total });
+      } else if (newTotal < total) {
+        setTotalStatus({ type: "isDecrease", byAmount: total - newTotal });
+      } else {
+        setTotalStatus(null);
+      }
     }
 
     setTotal(newTotal);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price, quantity]);
 
   return (

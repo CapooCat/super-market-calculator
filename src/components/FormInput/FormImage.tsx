@@ -12,7 +12,6 @@ interface IFormImage {
 interface IImageInput {
   children?: React.ReactNode;
   className?: string;
-  disabled?: boolean;
 }
 
 const FormImage = memo(function ({ title, name }: IFormImage) {
@@ -20,7 +19,7 @@ const FormImage = memo(function ({ title, name }: IFormImage) {
   const { handleCamera } = useCameraContext();
   const image = useWatch({ control, name });
 
-  const ImageInput = ({ children, className = "", disabled = false }: IImageInput) => {
+  const ImageInput = ({ children, className = "" }: IImageInput) => {
     const styleClass = classNames(
       "box-border relative flex items-center justify-center w-full p-2 text-center border-2 border-gray-700 border-dashed rounded-xl aspect-square",
       { [className]: className != null },
