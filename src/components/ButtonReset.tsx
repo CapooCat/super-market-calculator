@@ -18,7 +18,11 @@ const ButtonReset = memo(() => {
 
   return (
     <>
-      <Button icon={<IconReload size={18} />} className="rounded-full" onClick={() => showOverlay(true)} />
+      <Button
+        icon={<IconReload size={18} />}
+        className="-translate-y-[50%] w-16 h-16 rounded-full border-gray-900 border-8"
+        onClick={() => showOverlay(true)}
+      />
 
       <Dialog
         header="Xoá toàn bộ?"

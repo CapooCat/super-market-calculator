@@ -1,5 +1,7 @@
 import useAsync from "../hooks/useAsync";
 
+
+
 import { IconCheck, IconFocusCentered, IconX } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
@@ -7,9 +9,13 @@ import React, { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
+
+
 import Loading from "./Loading";
+import { useGeminiContext } from "@/context/GeminiContext";
 import useCamera from "@/hooks/useCamera";
 import compressImage from "@/utils/compressImage";
+
 
 interface IOverlayCameraProps {
   fieldName: string;
@@ -18,6 +24,7 @@ interface IOverlayCameraProps {
 const OverlayCamera = ({ fieldName }: IOverlayCameraProps) => {
   const { setValue } = useFormContext();
   const { videoRef, canvasRef, photo, clearPhoto, startCamera, takePhoto, stopCamera } = useCamera();
+  const { isConnected, startBackgroundExtraction } = useGeminiContext();
   const compress = useAsync((blob: Blob) => compressImage(blob), []);
   const navigate = useNavigate();
 
@@ -32,7 +39,18 @@ const OverlayCamera = ({ fieldName }: IOverlayCameraProps) => {
 
   useEffect(() => {
     if (compress.data) {
-      setValue(fieldName, compress.data);
+      const imageData = compress.data;
+      const priceFieldName = fieldName.replace(".image", ".price");
+
+      // Set image field
+      setValue(fieldName, imageData);
+
+      // Start background extraction if connected
+      if (isConnected) {
+        startBackgroundExtraction(imageData, priceFieldName, setValue);
+      }
+
+      // Navigate back immediately
       stopCamera();
       navigate(-1);
     }

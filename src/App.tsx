@@ -10,6 +10,7 @@ import PrimeReactConfig from "@/config/primeReact.config";
 import { CameraProvider } from "@/context/CameraContext";
 import { FormArrayProvider } from "@/context/FormArrayContext";
 import { FormStorageProvider } from "@/context/FormStorageContext";
+import { GeminiProvider } from "@/context/GeminiContext";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 function App() {
@@ -25,16 +26,18 @@ function App() {
       <FormArrayProvider name="fieldArray">
         <FormStorageProvider name="fieldArray" storage="fieldArrayStore">
           <PrimeReactProvider value={PrimeReactConfig}>
-            <CameraProvider>
-              <Header />
-              <Form />
-              <Footer />
-              <ConfirmPopup
-                pt={{
-                  rejectButton: { root: () => "border border-primary m-0" },
-                }}
-              />
-            </CameraProvider>
+            <GeminiProvider>
+              <CameraProvider>
+                <Header />
+                <Form />
+                <Footer />
+                <ConfirmPopup
+                  pt={{
+                    rejectButton: { root: () => "border border-primary m-0" },
+                  }}
+                />
+              </CameraProvider>
+            </GeminiProvider>
           </PrimeReactProvider>
         </FormStorageProvider>
       </FormArrayProvider>
