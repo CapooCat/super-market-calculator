@@ -3,6 +3,7 @@ import { ConfirmPopup } from "primereact/confirmpopup";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import ExtractionStatusToast from "./components/ExtractionStatusBadge";
 import Footer from "@/components/Footer";
 import Form from "@/components/Form";
 import Header from "@/components/Header";
@@ -28,6 +29,7 @@ function App() {
           <PrimeReactProvider value={PrimeReactConfig}>
             <GeminiProvider>
               <CameraProvider>
+                <ExtractionStatusToast />
                 <Header />
                 <Form />
                 <Footer />

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 
 import Loading from "./Loading";
+import { useFormArray } from "@/context/FormArrayContext";
 import { useGeminiContext } from "@/context/GeminiContext";
 import useCamera from "@/hooks/useCamera";
 import compressImage from "@/utils/compressImage";
@@ -19,10 +20,12 @@ import compressImage from "@/utils/compressImage";
 
 interface IOverlayCameraProps {
   fieldName: string;
+  type: "update" | "append";
 }
 
-const OverlayCamera = ({ fieldName }: IOverlayCameraProps) => {
+const OverlayCamera = ({ fieldName, type }: IOverlayCameraProps) => {
   const { setValue } = useFormContext();
+  const { append, fields } = useFormArray();
   const { videoRef, canvasRef, photo, clearPhoto, startCamera, takePhoto, stopCamera } = useCamera();
   const { isConnected, startBackgroundExtraction } = useGeminiContext();
   const compress = useAsync((blob: Blob) => compressImage(blob), []);
@@ -40,14 +43,25 @@ const OverlayCamera = ({ fieldName }: IOverlayCameraProps) => {
   useEffect(() => {
     if (compress.data) {
       const imageData = compress.data;
-      const priceFieldName = fieldName.replace(".image", ".price");
 
-      // Set image field
-      setValue(fieldName, imageData);
+      if (type === "append") {
+        append({ image: imageData, price: null, quantity: 1 });
+        const priceFieldName = `${fieldName}[${[fields?.length || 0]}].price`;
 
-      // Start background extraction if connected
-      if (isConnected) {
-        startBackgroundExtraction(imageData, priceFieldName, setValue);
+        if (isConnected) {
+          startBackgroundExtraction(imageData, priceFieldName, setValue);
+        }
+      }
+
+      if (type === "update") {
+        const priceFieldName = fieldName.replace(".image", ".price");
+        // Set image field
+        setValue(fieldName, imageData);
+
+        // Start background extraction if connected
+        if (isConnected) {
+          startBackgroundExtraction(imageData, priceFieldName, setValue);
+        }
       }
 
       // Navigate back immediately

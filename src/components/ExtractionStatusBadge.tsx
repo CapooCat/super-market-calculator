@@ -1,6 +1,6 @@
 import { IconCheck, IconLoader2, IconSearch, IconX } from "@tabler/icons-react";
 import { Tag } from "primereact/tag";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { ExtractionStatus, useGeminiContext } from "@/context/GeminiContext";
 
@@ -41,13 +41,38 @@ const getStatusConfig = (status: ExtractionStatus): IStatusConfig | null => {
   }
 };
 
-const ExtractionStatusBadge: React.FC = () => {
+const AUTO_HIDE_MS = 2000;
+
+const ExtractionStatusToast: React.FC = () => {
   const { extractionStatus } = useGeminiContext();
   const config = getStatusConfig(extractionStatus);
 
-  if (!config) return null;
+  const [visible, setVisible] = useState(false);
 
-  return <Tag value={config.value} severity={config.severity} icon={config.icon} className="flex gap-1" />;
+  useEffect(() => {
+    if (!config) return;
+
+    setVisible(true);
+
+    const timer = setTimeout(() => {
+      setVisible(false);
+    }, AUTO_HIDE_MS);
+
+    return () => clearTimeout(timer);
+  }, [extractionStatus]);
+
+  if (!config || !visible) return null;
+
+  return (
+    <div className="fixed z-50 flex justify-center w-full top-4">
+      <Tag
+        value={config.value}
+        severity={config.severity}
+        icon={config.icon}
+        className="flex gap-2 px-3 py-2 shadow-lg animate-toast-out-delayed"
+      />
+    </div>
+  );
 };
 
-export default ExtractionStatusBadge;
+export default ExtractionStatusToast;

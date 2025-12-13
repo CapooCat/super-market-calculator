@@ -5,7 +5,7 @@ import OverlayCamera from "@/components/OverlayCamera";
 import useOverlayParam from "@/hooks/useOverlayParam";
 
 interface ICameraContext {
-  handleCamera: (formInputName: string) => void;
+  handleCamera: (formInputName: string, type?: "update" | "append") => void;
 }
 
 const CameraContext = createContext<ICameraContext | undefined>(undefined);
@@ -13,10 +13,12 @@ const CameraContext = createContext<ICameraContext | undefined>(undefined);
 export const CameraProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isThisOverlay, showOverlay } = useOverlayParam("camera");
   const [fieldName, setFieldName] = useState<string>("");
+  const [type, setType] = useState<"update" | "append">("update");
 
-  const handleCamera = (formInputName: string) => {
+  const handleCamera = (formInputName: string, type: "update" | "append" = "update") => {
     showOverlay(true);
     setFieldName(formInputName);
+    setType(type);
   };
 
   return (
@@ -29,7 +31,7 @@ export const CameraProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         dismissableMask
         onHide={() => showOverlay(false)}
       >
-        <OverlayCamera fieldName={fieldName} />
+        <OverlayCamera fieldName={fieldName} type={type} />
       </Dialog>
     </CameraContext.Provider>
   );
