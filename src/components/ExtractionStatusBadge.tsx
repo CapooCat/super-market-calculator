@@ -1,5 +1,6 @@
 import { IconCheck, IconLoader2, IconSearch, IconX } from "@tabler/icons-react";
 import { Tag } from "primereact/tag";
+import { classNames } from "primereact/utils";
 import React, { useEffect, useState } from "react";
 
 import { ExtractionStatus, useGeminiContext } from "@/context/GeminiContext";
@@ -54,6 +55,8 @@ const ExtractionStatusToast: React.FC = () => {
 
     setVisible(true);
 
+    if (extractionStatus === "extracting") return;
+
     const timer = setTimeout(() => {
       setVisible(false);
     }, AUTO_HIDE_MS);
@@ -61,15 +64,20 @@ const ExtractionStatusToast: React.FC = () => {
     return () => clearTimeout(timer);
   }, [extractionStatus]);
 
-  if (!config || !visible) return null;
+  if (!config) return null;
 
   return (
-    <div className="fixed z-50 flex justify-center w-full top-4">
+    <div
+      className={classNames("fixed z-50 flex justify-center w-full top-4", {
+        "animate-toast-in": visible,
+        "animate-toast-out": !visible,
+      })}
+    >
       <Tag
         value={config.value}
         severity={config.severity}
         icon={config.icon}
-        className="flex gap-2 px-3 py-2 shadow-lg animate-toast-out-delayed"
+        className={classNames("flex gap-2 px-3 py-2 shadow-lg")}
       />
     </div>
   );
