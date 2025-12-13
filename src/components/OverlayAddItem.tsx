@@ -28,10 +28,7 @@ const OverlayAddItem = () => {
 
   const handleOnConfirm = () => {
     const [inputImage, inputPrice] = getValues(["item.image", "item.price"]);
-
-    if (inputImage && inputPrice)
-      append({ image: inputImage, price: inputPrice, quantity: 1, date: dayjs().toISOString() });
-
+    append({ image: inputImage, price: inputPrice, quantity: 1, date: dayjs().toISOString() });
     setValue("item", { image: null, price: null });
     showOverlay(false);
     scrollToBottom();
