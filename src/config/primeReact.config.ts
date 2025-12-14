@@ -25,6 +25,16 @@ const PrimeReactConfig: object = {
       footer: "p-4 pt-0 flex flex-col flex-col-reverse gap-2 ",
       message: "m-0",
     },
+    accordion: {
+      root: "flex flex-col gap-2",
+    },
+    accordiontab: {
+      root: "bg-black/20 overflow-hidden rounded-3xl",
+      header: "bg-transparent",
+      headerAction: "p-4 bg-transparent hover:bg-black/20 transition-colors rounded-tl-3xl rounded-t-3xl",
+      toggleableContent: "bg-transparent",
+      content: "p-3 pt-0 bg-transparent rounded-bl-3xl  rounded-br-3xl",
+    },
   },
 };
 
