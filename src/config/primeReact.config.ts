@@ -31,8 +31,9 @@ const PrimeReactConfig: object = {
     accordiontab: {
       root: "bg-black/20 overflow-hidden rounded-3xl",
       header: "bg-transparent",
-      headerAction: "p-4 bg-transparent hover:bg-black/20 transition-colors rounded-tl-3xl rounded-t-3xl",
-      toggleableContent: "bg-transparent",
+      headerAction:
+        "p-4 bg-transparent hover:bg-black/20 transition-colors rounded-tl-3xl rounded-t-3xl !border-b-0 box-border",
+      toggleableContent: "bg-transparent !border-t border-gray-700",
       content: "p-3 pt-0 bg-transparent rounded-bl-3xl  rounded-br-3xl",
     },
   },
