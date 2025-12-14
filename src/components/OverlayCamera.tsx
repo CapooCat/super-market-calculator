@@ -40,7 +40,7 @@ const OverlayCamera = ({ onConfirm }: IOverlayCameraProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [compress.data]);
 
-  const takenPhotoLayout = classNames("relative flex flex-col items-center w-full gap-16", {
+  const takenPhotoLayout = classNames("relative flex flex-col items-center h-50 w-full gap-16 max-w-[400px]", {
     "hidden opacity-0": !photo?.blob?.url,
   });
 
@@ -98,21 +98,23 @@ const OverlayCamera = ({ onConfirm }: IOverlayCameraProps) => {
   return (
     <section className="w-full pb-28">
       <div className={cameraLayout}>
-        <div className="w-full overflow-hidden bg-black rounded-2xl max-w-[400px]">
-          <video ref={videoRef} className="object-cover w-full" autoPlay />
+        <div className="w-full overflow-hidden rounded-2xl max-w-[400px]">
+          <video ref={videoRef} className="object-cover w-full aspect-auto" autoPlay />
           <canvas ref={canvasRef} style={{ display: "none" }} />
         </div>
       </div>
 
-      <div className={takenPhotoLayout}>
-        {compress.isLoading && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 rounded-2xl animation-fade-in">
-            <Loading />
+      <div className="flex justify-center">
+        <div className={takenPhotoLayout}>
+          {compress.isLoading && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 rounded-2xl animation-fade-in">
+              <Loading />
+            </div>
+          )}
+          <div className="relative w-full overflow-hidden bg-black rounded-2xl">
+            <div className="absolute inset-0 bg-black/50 animation-flash" />
+            <img src={photo?.blob?.url} alt="taken photo" className="object-cover w-full aspect-auto" />
           </div>
-        )}
-        <div className="relative w-full overflow-hidden bg-black rounded-2xl">
-          <div className="absolute inset-0 bg-black/50 animation-flash" />
-          <img src={photo?.blob?.url} alt="taken photo" className="object-cover w-full aspect-square" />
         </div>
       </div>
 
