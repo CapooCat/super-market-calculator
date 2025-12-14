@@ -22,11 +22,14 @@ const Header = () => {
   }, [fields]);
 
   return (
-    <section className="sticky top-0 left-0 flex justify-between items-center w-[100svw] px-4 py-4 bg-gray-800 z-20 gap-4">
-      <div className="flex justify-between w-full text-lg font-medium">
-        <Label title="Tổng tiền:" value={formatCurrency(total)} />
-      </div>
-    </section>
+    <>
+      <div className="fixed inset-x-0 top-0 z-10 h-20 pointer-events-none bg-gradient-to-b from-black/90 to-transparent" />
+      <section className="sticky top-0 left-0 flex justify-between items-center w-[100svw] px-4 py-4 z-20 gap-4">
+        <div className="flex justify-between w-full text-lg font-medium">
+          <Label title="Tổng tiền:" value={formatCurrency(total)} />
+        </div>
+      </section>
+    </>
   );
 };
 

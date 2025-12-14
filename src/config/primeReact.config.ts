@@ -1,5 +1,6 @@
 const PrimeReactConfig: object = {
   ripple: true,
+
   pt: {
     inputtext: {
       root: "w-full p-2 h-fit text-white",
@@ -8,11 +9,12 @@ const PrimeReactConfig: object = {
       root: "w-full h-fit text-white",
     },
     dialog: {
-      root: "w-full m-0",
+      root: "w-full m-0 rounded-tr-3xl rounded-tl-3xl",
+      header: "rounded-tr-3xl rounded-tl-3xl",
       footer: "flex flex-col-reverse flex-col gap-2",
     },
     button: {
-      root: "p-2",
+      root: "!p-2",
     },
     tag: {
       root: "p-0 px-2 text-sm w-fit font-normal line-clamp-1",

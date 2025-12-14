@@ -6,11 +6,14 @@ import ButtonSummary from "./ButtonSummary";
 
 const Footer = () => {
   return (
-    <section className="fixed bottom-0 left-0 z-20 flex justify-center w-full h-20 gap-16 text-lg font-medium bg-gray-800">
-      <ButtonReset />
-      <ButtonAddItem />
-      <ButtonSummary />
-    </section>
+    <>
+      <div className="fixed inset-x-0 bottom-0 h-32 pointer-events-none -z-1 bg-gradient-to-t from-black/80 to-transparent" />
+      <section className="fixed bottom-0 left-0 z-20 flex justify-center w-full h-20 gap-8 text-lg font-medium">
+        <ButtonReset />
+        <ButtonAddItem />
+        <ButtonSummary />
+      </section>
+    </>
   );
 };
 

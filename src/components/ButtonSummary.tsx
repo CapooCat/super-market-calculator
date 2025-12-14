@@ -13,8 +13,9 @@ const ButtonSummary = () => {
     <>
       <Button
         icon={<IconDeviceFloppy />}
-        className="-translate-y-[50%] w-16 h-16 rounded-full border-gray-900 border-8"
+        className="-translate-y-[50%] w-16 h-16 rounded-full"
         onClick={() => showOverlay(true)}
+        raised
       />
 
       <Dialog

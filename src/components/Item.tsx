@@ -45,6 +45,7 @@ const Item = ({ name, index, onRemoveClick }: IItemProps) => {
       </div>
 
       <div className="flex flex-col gap-2 mb-auto">
+        <div className="flex items-center justify-center w-8 rounded-lg aspect-square bg-black/25">{index + 1}</div>
         <Button
           icon={<IconX size={18} />}
           text
@@ -52,7 +53,6 @@ const Item = ({ name, index, onRemoveClick }: IItemProps) => {
           className="w-8 mb-auto aspect-square bg-red-500/25"
           onClick={(e) => handleRemoveClick(e)}
         />
-        <div className="flex items-center justify-center w-8 rounded-lg aspect-square bg-black/25">{index + 1}</div>
       </div>
     </li>
   );

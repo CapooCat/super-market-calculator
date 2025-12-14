@@ -12,10 +12,11 @@ const ButtonAddItem = () => {
     <>
       <Button
         icon={<IconPlus />}
-        className="relative -translate-y-[50%] w-20 h-20 rounded-full border-gray-900 border-8 justify-center items-center overflow-visible"
+        className="relative -translate-y-[50%] w-40 h-20 rounded-full justify-center items-center overflow-visible"
         onClick={() => handleCamera("fieldArray", "append")}
+        raised
       >
-        <span className="absolute w-12 h-12 z-[-1] rounded-full bg-primary animate-ping opacity-75" />
+        <span className="absolute w-[100px] h-14 z-[-1] rounded-full bg-primary animate-ping opacity-90" />
       </Button>
 
       {/* <Dialog
