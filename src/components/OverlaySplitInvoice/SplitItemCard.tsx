@@ -1,5 +1,3 @@
-import Label from "../Label";
-
 import { IconPhoto, IconPlus, IconX } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";

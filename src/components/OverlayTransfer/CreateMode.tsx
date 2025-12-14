@@ -63,7 +63,6 @@ const CreateMode = () => {
   };
 
   const handleGenerateQR = async () => {
-    disconnect();
     setIsGenerating(true);
     setDataSent(false);
     try {
