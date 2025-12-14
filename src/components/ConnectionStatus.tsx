@@ -24,13 +24,21 @@ const ConnectionStatus: React.FC<IConnectionStatusProps> = ({ className }) => {
   return (
     <div className={containerClass}>
       {isChecking ? (
-        <IconLoader2 size={16} className="animate-spin" />
+        <>
+          <IconLoader2 size={16} className="animate-spin" />
+          <span>Connecting...</span>
+        </>
       ) : isConnected ? (
-        <IconSparkles size={16} />
+        <>
+          <IconSparkles size={16} />
+          <span>AI Detection Ready</span>
+        </>
       ) : (
-        <IconCloudOff size={16} />
+        <>
+          <IconCloudOff size={16} />
+          <span>AI Detection Offline</span>
+        </>
       )}
-      <span>AI detection</span>
     </div>
   );
 };

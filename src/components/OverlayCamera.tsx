@@ -1,22 +1,18 @@
 import useAsync from "../hooks/useAsync";
 
-
-
-import { IconCheck, IconFocusCentered, IconX } from "@tabler/icons-react";
+import { IconCheck, IconFocusCentered, IconPhoto, IconRefresh, IconX } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-
-
+import ConnectionStatus from "./ConnectionStatus";
 import Loading from "./Loading";
 import { useFormArray } from "@/context/FormArrayContext";
 import { useGeminiContext } from "@/context/GeminiContext";
 import useCamera from "@/hooks/useCamera";
 import compressImage from "@/utils/compressImage";
-
 
 interface IOverlayCameraProps {
   fieldName: string;
@@ -26,7 +22,9 @@ interface IOverlayCameraProps {
 const OverlayCamera = ({ fieldName, type }: IOverlayCameraProps) => {
   const { setValue } = useFormContext();
   const { append, fields } = useFormArray();
-  const { videoRef, canvasRef, photo, clearPhoto, startCamera, takePhoto, stopCamera } = useCamera();
+  const { videoRef, canvasRef, photo, setPhoto, clearPhoto, startCamera, takePhoto, stopCamera, switchCamera } =
+    useCamera();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { isConnected, startBackgroundExtraction } = useGeminiContext();
   const compress = useAsync((blob: Blob) => compressImage(blob), []);
   const navigate = useNavigate();
@@ -84,7 +82,7 @@ const OverlayCamera = ({ fieldName, type }: IOverlayCameraProps) => {
   });
 
   const TakePhotoActions = classNames(
-    "absolute left-0 right-0 flex justify-center w-full",
+    "absolute left-0 right-0 justify-self-center flex justify-between w-[70%]",
     "gap-4 bottom-10 translate-y-28 transition-all opacity-0 duration-300 pointer-event-none",
     {
       "opacity-100 !translate-y-0": !photo?.blob?.url,
@@ -109,10 +107,27 @@ const OverlayCamera = ({ fieldName, type }: IOverlayCameraProps) => {
     }
   };
 
+  const handleSelectFromDevice = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPhoto({
+        blob: {
+          instance: file,
+          url: url,
+        },
+      });
+    }
+  };
+
   return (
     <section className="w-full pb-28">
       <div className={cameraLayout}>
-        <div className="w-full overflow-hidden bg-black rounded-2xl">
+        <div className="w-full overflow-hidden bg-black rounded-2xl max-w-[400px]">
           <video ref={videoRef} className="object-cover w-full aspect-square" autoPlay />
           <canvas ref={canvasRef} style={{ display: "none" }} />
         </div>
@@ -130,8 +145,16 @@ const OverlayCamera = ({ fieldName, type }: IOverlayCameraProps) => {
         </div>
       </div>
 
+      <input type="file" ref={fileInputRef} accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
+
+      <div className="flex justify-center w-full mt-6">
+        <ConnectionStatus />
+      </div>
+
       <div className={TakePhotoActions}>
+        <Button icon={<IconPhoto />} onClick={handleSelectFromDevice} className={button} outlined />
         <Button icon={<IconFocusCentered />} onClick={() => takePhoto()} className={button} />
+        <Button icon={<IconRefresh />} onClick={switchCamera} className={button} outlined />
       </div>
 
       <div className={confirmPhotoActions}>

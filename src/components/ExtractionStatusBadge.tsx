@@ -42,7 +42,7 @@ const getStatusConfig = (status: ExtractionStatus): IStatusConfig | null => {
   }
 };
 
-const AUTO_HIDE_MS = 2000;
+const AUTO_HIDE_MS = 1000;
 
 const ExtractionStatusToast: React.FC = () => {
   const { extractionStatus } = useGeminiContext();

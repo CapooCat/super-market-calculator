@@ -6,11 +6,14 @@ export interface IUseCamera {
   videoRef: React.RefObject<HTMLVideoElement>;
   canvasRef: React.RefObject<HTMLCanvasElement>;
   isCameraActive: boolean;
+  facingMode: "user" | "environment";
   photo?: IPhoto;
+  setPhoto: React.Dispatch<React.SetStateAction<IPhoto | undefined>>;
   clearPhoto: () => void;
   startCamera: () => void;
   takePhoto: () => void;
   stopCamera: () => void;
+  switchCamera: () => void;
 }
 
 export interface IPhoto {
@@ -28,6 +31,7 @@ let stream: MediaStream | null = null;
 const useCamera = (): IUseCamera => {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [photo, setPhoto] = useState<IPhoto | undefined>(undefined);
+  const [facingMode, setFacingMode] = useState<"user" | "environment">("environment");
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -35,9 +39,9 @@ const useCamera = (): IUseCamera => {
     setPhoto(undefined);
   };
 
-  const startCamera = debounce(async () => {
+  const startCameraWithFacingMode = async (mode: "user" | "environment") => {
     try {
-      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: mode } });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -46,6 +50,10 @@ const useCamera = (): IUseCamera => {
     } catch {
       // Camera access denied or not available
     }
+  };
+
+  const startCamera = debounce(() => {
+    startCameraWithFacingMode(facingMode);
   }, 100);
 
   const stopCamera = debounce(async () => {
@@ -99,7 +107,17 @@ const useCamera = (): IUseCamera => {
     }
   };
 
-  return { videoRef, canvasRef, isCameraActive, photo, clearPhoto, startCamera, takePhoto, stopCamera };
+  const switchCamera = async () => {
+    const newMode = facingMode === "environment" ? "user" : "environment";
+    setFacingMode(newMode);
+
+    // Stop current stream and start with new facing mode
+    const tracks = stream?.getTracks();
+    tracks?.forEach((track) => track.stop());
+    await startCameraWithFacingMode(newMode);
+  };
+
+  return { videoRef, canvasRef, isCameraActive, facingMode, photo, setPhoto, clearPhoto, startCamera, takePhoto, stopCamera, switchCamera };
 };
 
 export default useCamera;
