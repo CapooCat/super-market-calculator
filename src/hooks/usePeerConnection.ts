@@ -15,14 +15,34 @@ const PEER_CONNECT_TIMEOUT = 30000; // 30 seconds to connect to remote peer
 const DATA_RECEIVE_TIMEOUT = 15000; // 15 seconds to receive data after connecting
 const WAITING_TIMEOUT = 120000; // 2 minutes waiting for scanner
 
-// PeerJS config with public STUN servers for better connectivity
+// PeerJS config with STUN and TURN servers for better connectivity
+// TURN servers are needed for symmetric NAT traversal (some mobile networks, corporate firewalls)
 const PEER_CONFIG = {
   config: {
     iceServers: [
       { urls: "stun:stun.l.google.com:19302" },
       { urls: "stun:stun1.l.google.com:19302" },
       { urls: "stun:stun2.l.google.com:19302" },
+      { urls: "stun:stun3.l.google.com:19302" },
+      { urls: "stun:stun4.l.google.com:19302" },
+      // Free TURN servers from Open Relay Project
+      {
+        urls: "turn:openrelay.metered.ca:80",
+        username: "openrelayproject",
+        credential: "openrelayproject",
+      },
+      {
+        urls: "turn:openrelay.metered.ca:443",
+        username: "openrelayproject",
+        credential: "openrelayproject",
+      },
+      {
+        urls: "turn:openrelay.metered.ca:443?transport=tcp",
+        username: "openrelayproject",
+        credential: "openrelayproject",
+      },
     ],
+    iceCandidatePoolSize: 10,
   },
   debug: 0, // Set to 3 for verbose logging
 };
@@ -64,19 +84,23 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
     }
   }, []);
 
-  const cleanupConnection = useCallback(() => {
-    clearTimeoutRef();
+  const closeConnection = useCallback(() => {
     clearDataTimeoutRef();
     if (connectionRef.current) {
       connectionRef.current.close();
       connectionRef.current = null;
     }
+  }, [clearDataTimeoutRef]);
+
+  const cleanupConnection = useCallback(() => {
+    clearTimeoutRef();
+    closeConnection();
     if (peerRef.current) {
       peerRef.current.destroy();
       peerRef.current = null;
     }
     setPeerId(null);
-  }, [clearTimeoutRef, clearDataTimeoutRef]);
+  }, [clearTimeoutRef, closeConnection]);
 
   const cleanup = useCallback(() => {
     cleanupConnection();
@@ -107,8 +131,19 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
 
       conn.on("close", () => {
         clearDataTimeoutRef();
-        setConnectionStatus("idle");
         connectionRef.current = null;
+        // For sender side: go back to waiting for new connections
+        // For receiver side: go back to idle
+        if (!isReceiver && peerRef.current && !peerRef.current.destroyed) {
+          setConnectionStatus("waiting");
+          // Reset waiting timeout for new connections
+          timeoutRef.current = setTimeout(() => {
+            setError("Quá thời gian chờ quét. Vui lòng tạo mã mới.");
+            setConnectionStatus("timeout");
+          }, WAITING_TIMEOUT);
+        } else {
+          setConnectionStatus("idle");
+        }
       });
 
       conn.on("error", (err) => {

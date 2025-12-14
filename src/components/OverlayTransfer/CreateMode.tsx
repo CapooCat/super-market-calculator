@@ -14,16 +14,8 @@ import formatCurrency from "@/utils/formatCurrency";
 const CreateMode = () => {
   const { control } = useFormContext();
   const fields: IFieldArray[] = useWatch({ control, name: "fieldArray" });
-  const {
-    peerId,
-    connectionStatus,
-    error,
-    selectedIndices,
-    setSelectedIndices,
-    initializePeer,
-    sendData,
-    disconnect,
-  } = useTransferContext();
+  const { peerId, connectionStatus, error, selectedIndices, setSelectedIndices, initializePeer, sendData, disconnect } =
+    useTransferContext();
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [dataSent, setDataSent] = useState(false);
@@ -42,6 +34,10 @@ const CreateMode = () => {
       const selectedItems = selectedIndices.map((index) => fields[index]);
       sendData({ items: selectedItems });
       setDataSent(true);
+    }
+    // Reset dataSent when going back to waiting (ready for new connection)
+    if (connectionStatus === "waiting" && dataSent) {
+      setDataSent(false);
     }
   }, [connectionStatus, dataSent, fields, selectedIndices, sendData]);
 
@@ -74,11 +70,7 @@ const CreateMode = () => {
     disconnect();
     setIsGenerating(true);
     setDataSent(false);
-    try {
-      await initializePeer();
-    } catch {
-      // Error is handled in hook
-    }
+    await initializePeer();
     setIsGenerating(false);
   };
 
@@ -153,7 +145,8 @@ const CreateMode = () => {
         <div className="flex flex-col items-center self-center gap-3 p-4 bg-white rounded-xl w-fit">
           <QRCodeSVG value={peerId} size={200} level="M" />
           <span className="text-xs text-center text-gray-600">
-            {connectionStatus === "waiting" && "Đang chờ thiết bị quét..."}
+            {connectionStatus === "waiting" && !dataSent && "Đang chờ thiết bị quét..."}
+            {connectionStatus === "waiting" && dataSent && "✓ Đã gửi! Sẵn sàng cho thiết bị tiếp theo..."}
             {connectionStatus === "connecting" && "Đang kết nối..."}
             {connectionStatus === "connected" && dataSent && "✓ Đã gửi dữ liệu thành công!"}
           </span>
