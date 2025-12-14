@@ -12,7 +12,20 @@ export type ConnectionStatus = "idle" | "initializing" | "waiting" | "connecting
 // Timeout durations in milliseconds
 const PEER_INIT_TIMEOUT = 15000; // 15 seconds to initialize peer
 const PEER_CONNECT_TIMEOUT = 30000; // 30 seconds to connect to remote peer
+const DATA_RECEIVE_TIMEOUT = 15000; // 15 seconds to receive data after connecting
 const WAITING_TIMEOUT = 120000; // 2 minutes waiting for scanner
+
+// PeerJS config with public STUN servers for better connectivity
+const PEER_CONFIG = {
+  config: {
+    iceServers: [
+      { urls: "stun:stun.l.google.com:19302" },
+      { urls: "stun:stun1.l.google.com:19302" },
+      { urls: "stun:stun2.l.google.com:19302" },
+    ],
+  },
+  debug: 0, // Set to 3 for verbose logging
+};
 
 interface UsePeerConnectionReturn {
   peerId: string | null;
@@ -35,6 +48,7 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
   const peerRef = useRef<Peer | null>(null);
   const connectionRef = useRef<DataConnection | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dataTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const clearTimeoutRef = useCallback(() => {
     if (timeoutRef.current) {
@@ -43,8 +57,16 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
     }
   }, []);
 
-  const cleanup = useCallback(() => {
+  const clearDataTimeoutRef = useCallback(() => {
+    if (dataTimeoutRef.current) {
+      clearTimeout(dataTimeoutRef.current);
+      dataTimeoutRef.current = null;
+    }
+  }, []);
+
+  const cleanupConnection = useCallback(() => {
     clearTimeoutRef();
+    clearDataTimeoutRef();
     if (connectionRef.current) {
       connectionRef.current.close();
       connectionRef.current = null;
@@ -54,51 +76,65 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
       peerRef.current = null;
     }
     setPeerId(null);
+  }, [clearTimeoutRef, clearDataTimeoutRef]);
+
+  const cleanup = useCallback(() => {
+    cleanupConnection();
     setConnectionStatus("idle");
     setError(null);
-  }, [clearTimeoutRef]);
+  }, [cleanupConnection]);
 
   const setupConnectionListeners = useCallback(
-    (conn: DataConnection) => {
+    (conn: DataConnection, isReceiver: boolean = false) => {
       conn.on("open", () => {
         clearTimeoutRef();
         setConnectionStatus("connected");
         connectionRef.current = conn;
+
+        // If receiver (scanner), set timeout for receiving data
+        if (isReceiver) {
+          dataTimeoutRef.current = setTimeout(() => {
+            setError("Không nhận được dữ liệu. Vui lòng thử lại.");
+            setConnectionStatus("timeout");
+          }, DATA_RECEIVE_TIMEOUT);
+        }
       });
 
       conn.on("data", (data) => {
+        clearDataTimeoutRef(); // Clear data timeout when data received
         setReceivedData(data as ITransferData);
       });
 
       conn.on("close", () => {
+        clearDataTimeoutRef();
         setConnectionStatus("idle");
         connectionRef.current = null;
       });
 
       conn.on("error", (err) => {
         clearTimeoutRef();
+        clearDataTimeoutRef();
         setError(err.message);
         setConnectionStatus("error");
       });
     },
-    [clearTimeoutRef],
+    [clearTimeoutRef, clearDataTimeoutRef],
   );
 
   const initializePeer = useCallback((): Promise<string> => {
     return new Promise((resolve, reject) => {
       cleanup();
       setConnectionStatus("initializing");
-      setError(null);
 
       // Set timeout for peer initialization
       timeoutRef.current = setTimeout(() => {
+        cleanupConnection();
         setError("Kết nối quá thời gian. Vui lòng thử lại.");
         setConnectionStatus("timeout");
-        cleanup();
         reject(new Error("Peer initialization timeout"));
       }, PEER_INIT_TIMEOUT);
 
-      const peer = new Peer();
+      const peer = new Peer(PEER_CONFIG);
       peerRef.current = peer;
 
       peer.on("open", (id) => {
@@ -118,7 +154,7 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
       peer.on("connection", (conn) => {
         clearTimeoutRef();
         setConnectionStatus("connecting");
-        setupConnectionListeners(conn);
+        setupConnectionListeners(conn, false); // Sender side
       });
 
       peer.on("error", (err) => {
@@ -128,26 +164,27 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
         reject(err);
       });
     });
-  }, [cleanup, clearTimeoutRef, setupConnectionListeners]);
+  }, [cleanup, cleanupConnection, clearTimeoutRef, setupConnectionListeners]);
 
   const connectToPeer = useCallback(
     (remotePeerId: string): Promise<void> => {
       return new Promise((resolve, reject) => {
         // Set timeout for connection
         timeoutRef.current = setTimeout(() => {
+          cleanupConnection();
           setError("Kết nối quá thời gian. Vui lòng quét lại.");
           setConnectionStatus("timeout");
           reject(new Error("Connection timeout"));
         }, PEER_CONNECT_TIMEOUT);
 
         if (!peerRef.current) {
-          const peer = new Peer();
+          const peer = new Peer(PEER_CONFIG);
           peerRef.current = peer;
 
           peer.on("open", () => {
             setConnectionStatus("connecting");
             const conn = peer.connect(remotePeerId, { reliable: true });
-            setupConnectionListeners(conn);
+            setupConnectionListeners(conn, true); // Receiver side
 
             conn.on("open", () => {
               clearTimeoutRef();
@@ -169,7 +206,7 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
         } else {
           setConnectionStatus("connecting");
           const conn = peerRef.current.connect(remotePeerId, { reliable: true });
-          setupConnectionListeners(conn);
+          setupConnectionListeners(conn, true); // Receiver side
 
           conn.on("open", () => {
             clearTimeoutRef();
@@ -183,7 +220,7 @@ const usePeerConnection = (): UsePeerConnectionReturn => {
         }
       });
     },
-    [clearTimeoutRef, setupConnectionListeners],
+    [cleanupConnection, clearTimeoutRef, setupConnectionListeners],
   );
 
   const sendData = useCallback((data: ITransferData) => {
