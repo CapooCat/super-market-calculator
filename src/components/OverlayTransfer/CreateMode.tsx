@@ -14,8 +14,16 @@ import formatCurrency from "@/utils/formatCurrency";
 const CreateMode = () => {
   const { control } = useFormContext();
   const fields: IFieldArray[] = useWatch({ control, name: "fieldArray" });
-  const { peerId, connectionStatus, selectedIndices, setSelectedIndices, initializePeer, sendData, disconnect } =
-    useTransferContext();
+  const {
+    peerId,
+    connectionStatus,
+    error,
+    selectedIndices,
+    setSelectedIndices,
+    initializePeer,
+    sendData,
+    disconnect,
+  } = useTransferContext();
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [dataSent, setDataSent] = useState(false);
@@ -63,6 +71,7 @@ const CreateMode = () => {
   };
 
   const handleGenerateQR = async () => {
+    disconnect();
     setIsGenerating(true);
     setDataSent(false);
     try {
@@ -72,7 +81,6 @@ const CreateMode = () => {
     }
     setIsGenerating(false);
   };
-
 
   const Image = ({ src }: { src: string }) => {
     const imageClass = classNames("size-12 aspect-square rounded-lg", {
@@ -141,7 +149,7 @@ const CreateMode = () => {
       </div>
 
       {/* QR Code display */}
-      {peerId && (
+      {peerId && connectionStatus !== "timeout" && connectionStatus !== "error" && (
         <div className="flex flex-col items-center self-center gap-3 p-4 bg-white rounded-xl w-fit">
           <QRCodeSVG value={peerId} size={200} level="M" />
           <span className="text-xs text-center text-gray-600">
@@ -149,6 +157,13 @@ const CreateMode = () => {
             {connectionStatus === "connecting" && "Đang kết nối..."}
             {connectionStatus === "connected" && dataSent && "✓ Đã gửi dữ liệu thành công!"}
           </span>
+        </div>
+      )}
+
+      {/* Error/Timeout state */}
+      {(connectionStatus === "timeout" || connectionStatus === "error") && error && (
+        <div className="flex flex-col items-center gap-3 p-4 text-center rounded-xl bg-red-500/20">
+          <span className="text-sm text-red-300">{error}</span>
         </div>
       )}
 
@@ -168,7 +183,7 @@ const CreateMode = () => {
           className="justify-center w-full"
           title="Tạo mã QR"
         >
-          Tạo mã QR
+          {connectionStatus === "timeout" || connectionStatus === "error" ? "Thử lại" : "Tạo mã QR"}
         </Button>
       </div>
     </div>

@@ -15,7 +15,8 @@ type ImportMode = "replace" | "append";
 
 const ScanMode = () => {
   const { append, replace } = useFormArray();
-  const { connectionStatus, receivedData, connectToPeer, disconnect, resetReceivedData } = useTransferContext();
+  const { connectionStatus, error, receivedData, connectToPeer, disconnect, resetReceivedData } =
+    useTransferContext();
 
   const [isScanning, setIsScanning] = useState(true);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -174,8 +175,11 @@ const ScanMode = () => {
 
       {!isScanning && !isConnecting && connectionStatus !== "connected" && (
         <div className="flex flex-col items-center gap-4 py-8">
-          <IconX className="size-20" />
-          <span className="text-lg font-medium">Nhập dữ liệu thất bại!</span>
+          <IconX className="size-20 text-red-400" />
+          <span className="text-lg font-medium">
+            {connectionStatus === "timeout" ? "Kết nối quá thời gian" : "Nhập dữ liệu thất bại!"}
+          </span>
+          {error && <span className="text-sm text-gray-400">{error}</span>}
           <Button label="Quét lại" onClick={handleReset} className="mt-4" />
         </div>
       )}
