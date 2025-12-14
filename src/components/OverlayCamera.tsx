@@ -4,28 +4,21 @@ import { IconCheck, IconFocusCentered, IconPhoto, IconRefresh, IconX } from "@ta
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
 import React, { useEffect, useRef } from "react";
-import { useFormContext } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import ConnectionStatus from "./ConnectionStatus";
 import Loading from "./Loading";
-import { useFormArray } from "@/context/FormArrayContext";
-import { useGeminiContext } from "@/context/GeminiContext";
 import useCamera from "@/hooks/useCamera";
 import compressImage from "@/utils/compressImage";
 
 interface IOverlayCameraProps {
-  fieldName: string;
-  type: "update" | "append";
+  onConfirm: (imageData: string) => void;
 }
 
-const OverlayCamera = ({ fieldName, type }: IOverlayCameraProps) => {
-  const { setValue } = useFormContext();
-  const { append, fields } = useFormArray();
+const OverlayCamera = ({ onConfirm }: IOverlayCameraProps) => {
   const { videoRef, canvasRef, photo, setPhoto, clearPhoto, startCamera, takePhoto, stopCamera, switchCamera } =
     useCamera();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { isConnected, startBackgroundExtraction } = useGeminiContext();
   const compress = useAsync((blob: Blob) => compressImage(blob), []);
   const navigate = useNavigate();
 
@@ -40,29 +33,7 @@ const OverlayCamera = ({ fieldName, type }: IOverlayCameraProps) => {
 
   useEffect(() => {
     if (compress.data) {
-      const imageData = compress.data;
-
-      if (type === "append") {
-        append({ image: imageData, price: null, quantity: 1 });
-        const priceFieldName = `${fieldName}[${[fields?.length || 0]}].price`;
-
-        if (isConnected) {
-          startBackgroundExtraction(imageData, priceFieldName, setValue);
-        }
-      }
-
-      if (type === "update") {
-        const priceFieldName = fieldName.replace(".image", ".price");
-        // Set image field
-        setValue(fieldName, imageData);
-
-        // Start background extraction if connected
-        if (isConnected) {
-          startBackgroundExtraction(imageData, priceFieldName, setValue);
-        }
-      }
-
-      // Navigate back immediately
+      onConfirm(compress.data);
       stopCamera();
       navigate(-1);
     }

@@ -1,37 +1,52 @@
 import { Dialog } from "primereact/dialog";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useRef } from "react";
 
 import OverlayCamera from "@/components/OverlayCamera";
 import useOverlayParam from "@/hooks/useOverlayParam";
 
+type CameraCallback = (imageData: string) => void;
+
 interface ICameraContext {
-  handleCamera: (formInputName: string, type?: "update" | "append") => void;
+  openCamera: (onConfirm: CameraCallback) => void;
 }
 
 const CameraContext = createContext<ICameraContext | undefined>(undefined);
 
 export const CameraProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isThisOverlay, showOverlay } = useOverlayParam("camera");
-  const [fieldName, setFieldName] = useState<string>("");
-  const [type, setType] = useState<"update" | "append">("update");
+  const callbackRef = useRef<CameraCallback | null>(null);
 
-  const handleCamera = (formInputName: string, type: "update" | "append" = "update") => {
-    showOverlay(true);
-    setFieldName(formInputName);
-    setType(type);
-  };
+  const openCamera = useCallback(
+    (onConfirm: CameraCallback) => {
+      callbackRef.current = onConfirm;
+      showOverlay(true);
+    },
+    [showOverlay],
+  );
+
+  const handleConfirm = useCallback((imageData: string) => {
+    if (callbackRef.current) {
+      callbackRef.current(imageData);
+      callbackRef.current = null;
+    }
+  }, []);
+
+  const handleClose = useCallback(() => {
+    callbackRef.current = null;
+    showOverlay(false);
+  }, [showOverlay]);
 
   return (
-    <CameraContext.Provider value={{ handleCamera }}>
+    <CameraContext.Provider value={{ openCamera }}>
       {children}
       <Dialog
         header="Camera"
-        visible={isThisOverlay && !!fieldName}
+        visible={isThisOverlay}
         position="bottom"
         dismissableMask
-        onHide={() => showOverlay(false)}
+        onHide={handleClose}
       >
-        <OverlayCamera fieldName={fieldName} type={type} />
+        <OverlayCamera onConfirm={handleConfirm} />
       </Dialog>
     </CameraContext.Provider>
   );

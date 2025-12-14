@@ -3,6 +3,7 @@ import React, { memo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
 import { useCameraContext } from "@/context/CameraContext";
+import { useGeminiContext } from "@/context/GeminiContext";
 
 interface IFormImage {
   title: string;
@@ -15,9 +16,21 @@ interface IImageInput {
 }
 
 const FormImage = memo(function ({ title, name }: IFormImage) {
-  const { control } = useFormContext();
-  const { handleCamera } = useCameraContext();
+  const { control, setValue } = useFormContext();
+  const { openCamera } = useCameraContext();
+  const { isConnected, startBackgroundExtraction } = useGeminiContext();
   const image = useWatch({ control, name });
+
+  const handleOpenCamera = () => {
+    openCamera((imageData) => {
+      setValue(name, imageData);
+
+      const priceFieldName = name.replace(".image", ".price");
+      if (isConnected) {
+        startBackgroundExtraction(imageData, priceFieldName, setValue);
+      }
+    });
+  };
 
   const ImageInput = ({ children, className = "" }: IImageInput) => {
     const styleClass = classNames(
@@ -26,7 +39,7 @@ const FormImage = memo(function ({ title, name }: IFormImage) {
     );
 
     return (
-      <div className={styleClass} onClick={() => handleCamera(name)}>
+      <div className={styleClass} onClick={handleOpenCamera}>
         {children}
       </div>
     );
