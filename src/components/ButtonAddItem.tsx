@@ -27,11 +27,11 @@ const ButtonAddItem = () => {
   return (
     <Button
       icon={<IconPlus />}
-      className="relative -translate-y-[50%] w-40 h-20 rounded-full justify-center items-center overflow-visible"
+      className="relative -translate-y-[50%] w-20 h-20 rounded-full justify-center items-center overflow-visible"
       onClick={handleAddItem}
       raised
     >
-      <span className="absolute w-[100px] h-14 z-[-1] rounded-full bg-primary animate-ping opacity-90" />
+      <span className="absolute w-14 h-14 z-[-1] rounded-full bg-primary animate-ping opacity-90" />
     </Button>
   );
 };

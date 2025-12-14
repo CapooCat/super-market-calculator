@@ -13,7 +13,7 @@ const ButtonSplitInvoice = () => {
     <>
       <Button
         icon={<IconFileScissors />}
-        className="flex-shrink-0 w-10 h-10 rounded-full"
+        className="-translate-y-[50%] w-12 h-12 rounded-full "
         onClick={() => showOverlay(true)}
         raised
       />
