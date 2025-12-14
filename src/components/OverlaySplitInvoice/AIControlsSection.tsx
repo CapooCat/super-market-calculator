@@ -1,9 +1,12 @@
 import { IconSparkles } from "@tabler/icons-react";
 import { Button } from "primereact/button";
-import { InputNumber } from "primereact/inputnumber";
+import { InputNumber, InputNumberValueChangeEvent } from "primereact/inputnumber";
 import React from "react";
 
+
+
 import { useGeminiContext } from "@/context/GeminiContext";
+
 
 interface IAIControlsSectionProps {
   targetPrice: number | null;
@@ -15,13 +18,19 @@ interface IAIControlsSectionProps {
 const AIControlsSection = ({ targetPrice, setTargetPrice, onAISplit, isLoading }: IAIControlsSectionProps) => {
   const { isConnected } = useGeminiContext();
 
+  const handleOnChange = (e: InputNumberValueChangeEvent) => {
+    const regex = /000$/;
+    if (!regex.test(String(e.value))) setTargetPrice((e.value ?? 0) * 1000);
+    else setTargetPrice(e.value as number);
+  };
+
   return (
     <div className="px-4 pb-4 border-b border-gray-700">
       <p className="mb-2 text-sm text-gray-400">Tách thông minh với AI</p>
       <div className="flex gap-2">
         <InputNumber
           value={targetPrice}
-          onValueChange={(e) => setTargetPrice(e.value ?? null)}
+          onValueChange={handleOnChange}
           placeholder="Giá mục tiêu mỗi hoá đơn"
           className="flex-1"
           min={0}

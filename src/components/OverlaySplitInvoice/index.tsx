@@ -109,7 +109,7 @@ const OverlaySplitInvoice = () => {
   return (
     <>
       {aiSplit.isLoading && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center rounded-3xl bg-black/80">
+        <div className="absolute inset-0 z-50 flex items-center justify-center rounded-tl-3xl rounded-tr-3xl bg-black/70">
           <LoadingAI />
         </div>
       )}
