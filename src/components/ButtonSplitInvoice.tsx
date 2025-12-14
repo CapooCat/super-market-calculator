@@ -1,4 +1,4 @@
-import { IconCut, IconFileScissors } from "@tabler/icons-react";
+import { IconFileScissors } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React from "react";
