@@ -99,7 +99,7 @@ const OverlayCamera = ({ onConfirm }: IOverlayCameraProps) => {
     <section className="w-full pb-28">
       <div className={cameraLayout}>
         <div className="w-full overflow-hidden bg-black rounded-2xl max-w-[400px]">
-          <video ref={videoRef} className="object-cover w-full aspect-square" autoPlay />
+          <video ref={videoRef} className="object-cover w-full" autoPlay />
           <canvas ref={canvasRef} style={{ display: "none" }} />
         </div>
       </div>

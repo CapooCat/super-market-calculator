@@ -1,10 +1,11 @@
-import { IconPhoto } from "@tabler/icons-react";
+import Loading from "../Loading";
+
+import { IconCheck, IconPhoto, IconX } from "@tabler/icons-react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
 import React, { useEffect, useState } from "react";
 
-import Loading from "../Loading";
 import { useFormArray } from "@/context/FormArrayContext";
 import { useTransferContext } from "@/context/TransferContext";
 import { IFieldArray } from "@/models/IFieldArray";
@@ -14,13 +15,7 @@ type ImportMode = "replace" | "append";
 
 const ScanMode = () => {
   const { append, replace } = useFormArray();
-  const {
-    connectionStatus,
-    receivedData,
-    connectToPeer,
-    disconnect,
-    resetReceivedData,
-  } = useTransferContext();
+  const { connectionStatus, receivedData, connectToPeer, disconnect, resetReceivedData } = useTransferContext();
 
   const [isScanning, setIsScanning] = useState(true);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -85,7 +80,7 @@ const ScanMode = () => {
   if (importSuccess) {
     return (
       <div className="flex flex-col items-center gap-4 py-8">
-        <div className="text-6xl">✓</div>
+        <IconCheck className="size-20" />
         <span className="text-lg font-medium">Nhập dữ liệu thành công!</span>
         <Button label="Quét mã khác" onClick={handleReset} outlined className="mt-4" />
       </div>
@@ -105,7 +100,9 @@ const ScanMode = () => {
                 <Image src={item.image} />
                 <div className="flex flex-col flex-1 min-w-0">
                   <span className="text-sm truncate">{item.name || `Sản phẩm ${index + 1}`}</span>
-                  <span className="text-xs text-gray-400">{formatCurrency(item.price)} x {item.quantity}</span>
+                  <span className="text-xs text-gray-400">
+                    {formatCurrency(item.price)} x {item.quantity}
+                  </span>
                 </div>
               </li>
             ))}
@@ -113,17 +110,10 @@ const ScanMode = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Button
-            className="justify-center w-full text-lg border-2 border-black/50"
-            onClick={() => handleImport("replace")}
-          >
+          <Button className="justify-center w-full" onClick={() => handleImport("replace")}>
             Thay thế danh sách hiện tại
           </Button>
-          <Button
-            className="justify-center w-full text-lg border-2 border-black/50"
-            onClick={() => handleImport("append")}
-            outlined
-          >
+          <Button className="justify-center w-full" onClick={() => handleImport("append")} outlined>
             Thêm vào danh sách hiện tại
           </Button>
         </div>
@@ -135,8 +125,36 @@ const ScanMode = () => {
   return (
     <div className="flex flex-col items-center gap-4">
       {isScanning && (
-        <div className="w-full overflow-hidden rounded-2xl max-w-[300px] aspect-square">
-          <Scanner onScan={handleScan} />
+        <div className="w-full overflow-hidden rounded-2xl max-w-[300px] aspect-square qr-scanner-primary">
+          <Scanner
+            onScan={handleScan}
+            styles={{
+              container: {
+                width: "100%",
+                height: "100%",
+              },
+            }}
+            sound={false}
+            components={{
+              finder: false,
+              tracker: (detectedCodes, ctx) => {
+                if (detectedCodes.length > 0) {
+                  const code = detectedCodes[0];
+                  if (code.cornerPoints) {
+                    ctx.strokeStyle = "var(--primary-color)";
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(code.cornerPoints[0].x, code.cornerPoints[0].y);
+                    for (let i = 1; i < code.cornerPoints.length; i++) {
+                      ctx.lineTo(code.cornerPoints[i].x, code.cornerPoints[i].y);
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+                  }
+                }
+              },
+            }}
+          />
         </div>
       )}
 
@@ -155,7 +173,11 @@ const ScanMode = () => {
       )}
 
       {!isScanning && !isConnecting && connectionStatus !== "connected" && (
-        <Button label="Quét lại" onClick={handleReset} outlined className="mt-4" />
+        <div className="flex flex-col items-center gap-4 py-8">
+          <IconX className="size-20" />
+          <span className="text-lg font-medium">Nhập dữ liệu thất bại!</span>
+          <Button label="Quét lại" onClick={handleReset} className="mt-4" />
+        </div>
       )}
     </div>
   );

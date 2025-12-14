@@ -8,7 +8,7 @@ const compressImage = async (blob: Blob) => {
   const controller = new AbortController();
 
   const options = {
-    maxSizeMB: 0.05,
+    maxSizeMB: 0.5,
     initialQuality: 1,
     maxWidthOrHeight: 1920,
     fileType: "image/webp",

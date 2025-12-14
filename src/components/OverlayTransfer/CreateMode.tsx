@@ -1,12 +1,12 @@
-import { IconPhoto } from "@tabler/icons-react";
-import { QRCodeSVG } from "qrcode.react";
+import Loading from "../Loading";
+
+import { IconCheck, IconPhoto } from "@tabler/icons-react";
 import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
 import { classNames } from "primereact/utils";
+import { QRCodeSVG } from "qrcode.react";
 import React, { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
-import Loading from "../Loading";
 import { useTransferContext } from "@/context/TransferContext";
 import { IFieldArray } from "@/models/IFieldArray";
 import formatCurrency from "@/utils/formatCurrency";
@@ -14,25 +14,19 @@ import formatCurrency from "@/utils/formatCurrency";
 const CreateMode = () => {
   const { control } = useFormContext();
   const fields: IFieldArray[] = useWatch({ control, name: "fieldArray" });
-  const {
-    peerId,
-    connectionStatus,
-    selectedIndices,
-    setSelectedIndices,
-    initializePeer,
-    sendData,
-    disconnect,
-  } = useTransferContext();
+  const { peerId, connectionStatus, selectedIndices, setSelectedIndices, initializePeer, sendData, disconnect } =
+    useTransferContext();
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [dataSent, setDataSent] = useState(false);
 
-  // Initialize selection with all items
+  // Initialize selection with all items on first render
   useEffect(() => {
     if (fields.length > 0 && selectedIndices.length === 0) {
       setSelectedIndices(fields.map((_, index) => index));
     }
-  }, [fields, selectedIndices.length, setSelectedIndices]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fields.length]);
 
   // Auto-send data when connected
   useEffect(() => {
@@ -59,14 +53,17 @@ const CreateMode = () => {
   };
 
   const handleToggleItem = (index: number) => {
-    if (selectedIndices.includes(index)) {
-      setSelectedIndices(selectedIndices.filter((i) => i !== index));
-    } else {
-      setSelectedIndices([...selectedIndices, index]);
-    }
+    setSelectedIndices((prev) => {
+      if (prev.includes(index)) {
+        return prev.filter((i) => i !== index);
+      } else {
+        return [...prev, index];
+      }
+    });
   };
 
   const handleGenerateQR = async () => {
+    disconnect();
     setIsGenerating(true);
     setDataSent(false);
     try {
@@ -77,10 +74,6 @@ const CreateMode = () => {
     setIsGenerating(false);
   };
 
-  const handleReset = () => {
-    disconnect();
-    setDataSent(false);
-  };
 
   const Image = ({ src }: { src: string }) => {
     const imageClass = classNames("size-12 aspect-square rounded-lg", {
@@ -95,6 +88,8 @@ const CreateMode = () => {
     );
   };
 
+  const isSelected = (index: number) => selectedIndices.includes(index);
+
   if (!fields.length) {
     return <div className="py-4 text-center">Chưa có sản phẩm nào để chuyển</div>;
   }
@@ -104,7 +99,9 @@ const CreateMode = () => {
       {/* Item selection list */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between pb-2">
-          <span className="font-medium">Chọn sản phẩm ({selectedIndices.length}/{fields.length})</span>
+          <span className="font-medium">
+            Chọn sản phẩm ({selectedIndices.length}/{fields.length})
+          </span>
           <Button
             label={selectedIndices.length === fields.length ? "Bỏ chọn tất cả" : "Chọn tất cả"}
             link
@@ -113,18 +110,31 @@ const CreateMode = () => {
           />
         </div>
 
-        <ul className="flex flex-col gap-2 overflow-y-auto max-h-48">
+        <ul className="flex flex-col gap-2 overflow-auto max-h-[300px]">
           {fields.map((item, index) => (
             <li
               key={index}
-              className="flex items-center gap-3 p-2 rounded-lg cursor-pointer bg-black/25 hover:bg-black/40"
+              className={classNames(
+                "relative flex-shrink-0 flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all duration-200 overflow-hidden",
+                {
+                  "bg-primary/20 border-2 border-primary": isSelected(index),
+                  "bg-black/25 border-2 border-transparent hover:bg-black/40": !isSelected(index),
+                },
+              )}
               onClick={() => handleToggleItem(index)}
             >
-              <Checkbox checked={selectedIndices.includes(index)} onChange={() => handleToggleItem(index)} />
+              {/* Check icon on top right */}
+              {isSelected(index) && (
+                <div className="absolute flex items-center justify-center overflow-hidden rounded-full size-12 -top-5 -right-5 bg-primary">
+                  <IconCheck size={14} className="absolute text-white top-6 right-6" />
+                </div>
+              )}
               <Image src={item.image} />
               <div className="flex flex-col flex-1 min-w-0">
                 <span className="text-sm truncate">{item.name || `Sản phẩm ${index + 1}`}</span>
-                <span className="text-xs text-gray-400">{formatCurrency(item.price)} x {item.quantity}</span>
+                <span className="text-xs text-gray-400">
+                  {formatCurrency(item.price)} x {item.quantity}
+                </span>
               </div>
             </li>
           ))}
@@ -133,9 +143,9 @@ const CreateMode = () => {
 
       {/* QR Code display */}
       {peerId && (
-        <div className="flex flex-col items-center gap-3 p-4 rounded-xl bg-white">
+        <div className="flex flex-col items-center self-center gap-3 p-4 bg-white rounded-xl w-fit">
           <QRCodeSVG value={peerId} size={200} level="M" />
-          <span className="text-xs text-gray-600 text-center">
+          <span className="text-xs text-center text-gray-600">
             {connectionStatus === "waiting" && "Đang chờ thiết bị quét..."}
             {connectionStatus === "connecting" && "Đang kết nối..."}
             {connectionStatus === "connected" && dataSent && "✓ Đã gửi dữ liệu thành công!"}
@@ -145,30 +155,22 @@ const CreateMode = () => {
 
       {/* Loading state */}
       {isGenerating && (
-        <div className="flex items-center justify-center py-8">
+        <div className="flex flex-col items-center gap-4 py-8">
           <Loading />
+          <span>Đang tạo QR...</span>
         </div>
       )}
 
       {/* Action buttons */}
       <div className="flex gap-2">
-        {!peerId ? (
-          <Button
-            className="justify-center flex-1 text-lg border-2 border-black/50"
-            onClick={handleGenerateQR}
-            disabled={selectedIndices.length === 0 || isGenerating}
-          >
-            Tạo mã QR
-          </Button>
-        ) : (
-          <Button
-            className="justify-center flex-1 text-lg border-2 border-black/50"
-            onClick={handleReset}
-            outlined
-          >
-            Tạo mã mới
-          </Button>
-        )}
+        <Button
+          onClick={handleGenerateQR}
+          disabled={selectedIndices.length === 0 || isGenerating}
+          className="justify-center w-full"
+          title="Tạo mã QR"
+        >
+          Tạo mã QR
+        </Button>
       </div>
     </div>
   );

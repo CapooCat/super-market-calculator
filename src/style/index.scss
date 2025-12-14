@@ -102,4 +102,19 @@ body {
   animation: toast-out 0.25s ease-in forwards;
 }
 
+// QR Scanner primary color styling
+.qr-scanner-primary {
+  svg {
+    stroke: var(--primary-color) !important;
+  }
+  
+  // Target the finder corners
+  [data-testid="finder"] {
+    svg {
+      stroke: var(--primary-color) !important;
+    }
+  }
+}
+
+
 
