@@ -50,10 +50,10 @@ export const GeminiProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const applyExtractionResult = useCallback(
     (result: IExtractionResult, fieldPrefix: string, setValue: UseFormSetValue<Record<string, unknown>>) => {
       if (result.price !== null) {
-        setValue(`${fieldPrefix}.price`, result.price);
+        setValue(`${fieldPrefix}.price`, result.price as never);
       }
       if (result.name !== null) {
-        setValue(`${fieldPrefix}.name`, result.name);
+        setValue(`${fieldPrefix}.name`, result.name as never);
       }
     },
     [],
