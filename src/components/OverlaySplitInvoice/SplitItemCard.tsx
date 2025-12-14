@@ -1,9 +1,10 @@
+import Label from "../Label";
+
 import { IconPhoto, IconPlus, IconX } from "@tabler/icons-react";
 import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
 import React from "react";
 
-import Label from "../Label";
 import { IFieldArray } from "@/models/IFieldArray";
 import formatCurrency from "@/utils/formatCurrency";
 
@@ -35,21 +36,17 @@ const SplitItemCard = ({ item, index, action, onAction, disabled, isAssigned }: 
         </div>
       )}
 
-      <div className="flex-1 flex-shrink-0 min-w-0 p-2 pl-0">
+      <div className="flex flex-col flex-1 flex-shrink-0 min-w-0 gap-1 p-2 pl-0">
         {item.name && <p className="text-sm truncate">{item.name}</p>}
-        <div className="flex gap-2 text-xs text-gray-400">
+        <div className="flex gap-2 text-sm text-gray-400 item">
           <span>{formatCurrency(item.price)}</span>
           <span>x{item.quantity}</span>
         </div>
-        <Label
-          title="Tổng:"
-          value={formatCurrency(item.price * item.quantity)}
-          pt={{ root: "text-sm", title: "font-normal" }}
-        />
+        <span className="text-sm font-normal">Tổng: {formatCurrency(item.price * item.quantity)}</span>
       </div>
 
       <Button
-        icon={action === "add" ? <IconPlus size={14} /> : <IconX size={14} />}
+        icon={action === "add" ? <IconPlus size={20} /> : <IconX size={20} />}
         onClick={() => onAction(index)}
         disabled={disabled || (isAssigned && action === "add")}
         rounded
