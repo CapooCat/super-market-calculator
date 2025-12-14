@@ -68,7 +68,7 @@ const ExtractionStatusToast: React.FC = () => {
 
   return (
     <div
-      className={classNames("fixed z-50 flex justify-center w-full top-4", {
+      className={classNames("fixed z-50 flex justify-center w-full top-12", {
         "animate-toast-in": visible,
         "animate-toast-out": !visible,
       })}
