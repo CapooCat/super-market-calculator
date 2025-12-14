@@ -15,11 +15,11 @@ const ButtonAddItem = () => {
 
   const handleAddItem = () => {
     openCamera((imageData) => {
-      append({ image: imageData, price: null, quantity: 1 });
-      const priceFieldName = `fieldArray[${fields?.length || 0}].price`;
+      const index = fields?.length || 0;
+      append({ image: imageData, name: null, price: null, quantity: 1 });
 
       if (isConnected) {
-        startBackgroundExtraction(imageData, priceFieldName, setValue);
+        startBackgroundExtraction(imageData, `fieldArray[${index}]`, setValue);
       }
     });
   };

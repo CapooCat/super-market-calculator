@@ -25,9 +25,9 @@ const FormImage = memo(function ({ title, name }: IFormImage) {
     openCamera((imageData) => {
       setValue(name, imageData);
 
-      const priceFieldName = name.replace(".image", ".price");
+      const fieldPrefix = name.replace(".image", "");
       if (isConnected) {
-        startBackgroundExtraction(imageData, priceFieldName, setValue);
+        startBackgroundExtraction(imageData, fieldPrefix, setValue);
       }
     });
   };

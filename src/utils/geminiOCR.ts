@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 
-export interface IOCRResult {
+export interface IExtractionResult {
+  name: string | null;
   price: number | null;
   rawText: string | null;
   currency: string;
@@ -33,26 +34,28 @@ const buildExtractionPrompt = (currency: string): string => {
   const config = CURRENCY_CONFIGS[currency] || CURRENCY_CONFIGS.VND;
 
   return `
-Analyze this product image and extract the price.
+Analyze this product image and extract the product name and price.
 Currency: ${config.promptHint}
 
 Respond ONLY with valid JSON in this exact format:
-{"price": <number or null>, "rawText": "<the price text you found or null>"}
+{"name": "<product name or null>", "price": <number or null>, "rawText": "<the price text you found or null>"}
 
 Rules:
+- For name, return the product/item name visible on the packaging or label
 - For price, return the numeric value only without currency symbols
-- Example: "25.000đ" should return {"price": 25000, "rawText": "25.000đ"}
-- If no price is visible, return {"price": null, "rawText": null}
+- Example: "25.000đ" should return {"name": "Bánh mì", "price": 25000, "rawText": "25.000đ"}
+- If no price is visible, return null for price and rawText
+- If no name is visible, return null for name
 - Do not include any explanation, only the JSON
 `.trim();
 };
 
-export async function extractPriceFromImage(
+export async function extractFromImage(
   base64Image: string,
   apiKey: string,
   currency: string = "VND",
-): Promise<IOCRResult> {
-  const defaultResult: IOCRResult = { price: null, rawText: null, currency };
+): Promise<IExtractionResult> {
+  const defaultResult: IExtractionResult = { name: null, price: null, rawText: null, currency };
 
   if (!apiKey || !base64Image) {
     return defaultResult;
@@ -82,6 +85,7 @@ export async function extractPriceFromImage(
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0]);
       return {
+        name: typeof parsed.name === "string" ? parsed.name : null,
         price: typeof parsed.price === "number" ? parsed.price : null,
         rawText: parsed.rawText || null,
         currency,

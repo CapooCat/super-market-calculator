@@ -95,6 +95,7 @@ const OverlaySummary = () => {
         <div className="flex flex-shrink-0 gap-4 ">
           <Image src={item.image} />
           <div className="flex flex-col justify-start w-full gap-1">
+            {item.name && <Label title="Tên:" value={item.name} />}
             <Label title="Giá sản phẩm:" value={formatCurrency(item.price)} />
             <Label title="Số lượng:" value={item.quantity ?? 0} />
             <Label title="Tổng:" value={formatCurrency(item.price * item.quantity)} />

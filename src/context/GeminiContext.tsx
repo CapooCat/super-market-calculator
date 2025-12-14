@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 
-import { checkGeminiConnection, extractPriceFromImage, getApiKey, isApiKeyFormatValid } from "@/utils/geminiOCR";
+import { checkGeminiConnection, extractFromImage, getApiKey, IExtractionResult, isApiKeyFormatValid } from "@/utils/geminiOCR";
 
 export type ExtractionStatus = "idle" | "extracting" | "success" | "error" | "not_found";
 
@@ -12,7 +12,7 @@ interface IGeminiContext {
   resetExtractionStatus: () => void;
   startBackgroundExtraction: (
     base64Image: string,
-    priceFieldName: string,
+    fieldPrefix: string,
     setValue: UseFormSetValue<Record<string, unknown>>,
     currency?: string,
   ) => void;
@@ -47,10 +47,22 @@ export const GeminiProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setIsChecking(false);
   }, [apiKey, hasValidKeyFormat]);
 
+  const applyExtractionResult = useCallback(
+    (result: IExtractionResult, fieldPrefix: string, setValue: UseFormSetValue<Record<string, unknown>>) => {
+      if (result.price !== null) {
+        setValue(`${fieldPrefix}.price`, result.price);
+      }
+      if (result.name !== null) {
+        setValue(`${fieldPrefix}.name`, result.name);
+      }
+    },
+    [],
+  );
+
   const startBackgroundExtraction = useCallback(
     (
       base64Image: string,
-      priceFieldName: string,
+      fieldPrefix: string,
       setValue: UseFormSetValue<Record<string, unknown>>,
       currency: string = "VND",
     ) => {
@@ -60,10 +72,10 @@ export const GeminiProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       setExtractionStatus("extracting");
 
-      extractPriceFromImage(base64Image, apiKey, currency)
+      extractFromImage(base64Image, apiKey, currency)
         .then((result) => {
-          if (result.price !== null) {
-            setValue(priceFieldName, result.price);
+          if (result.price !== null || result.name !== null) {
+            applyExtractionResult(result, fieldPrefix, setValue);
             setExtractionStatus("success");
           } else {
             setExtractionStatus("not_found");
@@ -73,7 +85,7 @@ export const GeminiProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           setExtractionStatus("error");
         });
     },
-    [apiKey, isConnected],
+    [apiKey, isConnected, applyExtractionResult],
   );
 
   useEffect(() => {

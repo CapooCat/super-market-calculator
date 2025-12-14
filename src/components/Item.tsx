@@ -5,6 +5,7 @@ import React from "react";
 
 import FormImage from "./FormInput/FormImage";
 import FormNumber from "./FormInput/FormNumber";
+import FormText from "./FormInput/FormText";
 import FormTotal from "./FormInput/FormTotal";
 
 interface IItemProps {
@@ -31,11 +32,12 @@ const Item = ({ name, index, onRemoveClick }: IItemProps) => {
 
   return (
     <li className="flex items-center w-full gap-4 py-6">
-      <div className="w-36">
+      <div className="self-start w-36">
         <FormImage title="Thêm ảnh" name={`${name}.image`} />
       </div>
 
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="flex flex-col flex-1 gap-2.5">
+        <FormText name={`${name}.name`} placeholder="Tên sản phẩm..." />
         <FormNumber name={`${name}.price`} min={0} minFractionDigits={0} maxFractionDigits={3} quickComplete={true} />
         <FormNumber name={`${name}.quantity`} showButtons buttonLayout="horizontal" min={1} />
         <div className="flex flex-wrap gap-1 px-4 py-1 rounded-lg bg-black/50 w-fit">
