@@ -2,7 +2,7 @@ import { createContext, useEffect } from "react";
 import React from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useIndexedDB from "@/hooks/useIndexedDB";
 
 interface IUseFormStorage {
   children: React.ReactNode;
@@ -15,12 +15,14 @@ const FormStorageContext = createContext({});
 export function FormStorageProvider({ children, name, storage }: IUseFormStorage) {
   const { control } = useFormContext();
   const data = useWatch({ control, name: name });
-  const [, setStoredData] = useLocalStorage([], storage);
+  const [, setStoredData, isLoading] = useIndexedDB([], storage);
 
   useEffect(() => {
-    setStoredData(data);
+    if (!isLoading) {
+      setStoredData(data);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, isLoading]);
 
   return <FormStorageContext.Provider value={{}}>{children}</FormStorageContext.Provider>;
 }

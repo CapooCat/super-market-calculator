@@ -15,8 +15,7 @@ type ImportMode = "replace" | "append";
 
 const ScanMode = () => {
   const { append, replace } = useFormArray();
-  const { connectionStatus, error, receivedData, connectToPeer, disconnect, resetReceivedData } =
-    useTransferContext();
+  const { connectionStatus, error, receivedData, connectToPeer, disconnect, resetReceivedData } = useTransferContext();
 
   const [isScanning, setIsScanning] = useState(true);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -111,10 +110,7 @@ const ScanMode = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Button className="justify-center w-full" onClick={() => handleImport("replace")}>
-            Thay thế danh sách hiện tại
-          </Button>
-          <Button className="justify-center w-full" onClick={() => handleImport("append")} outlined>
+          <Button className="justify-center w-full" onClick={() => handleImport("append")}>
             Thêm vào danh sách hiện tại
           </Button>
         </div>

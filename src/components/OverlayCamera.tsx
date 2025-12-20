@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import ConnectionStatus from "./ConnectionStatus";
 import Loading from "./Loading";
 import useCamera from "@/hooks/useCamera";
+import useScroll from "@/hooks/useScroll";
 import compressImage from "@/utils/compressImage";
 
 interface IOverlayCameraProps {
@@ -21,6 +22,7 @@ const OverlayCamera = ({ onConfirm }: IOverlayCameraProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const compress = useAsync((blob: Blob) => compressImage(blob), []);
   const navigate = useNavigate();
+  const { scrollToBottom } = useScroll();
 
   useEffect(() => {
     startCamera();
@@ -36,6 +38,7 @@ const OverlayCamera = ({ onConfirm }: IOverlayCameraProps) => {
       onConfirm(compress.data);
       stopCamera();
       navigate(-1);
+      scrollToBottom();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [compress.data]);
