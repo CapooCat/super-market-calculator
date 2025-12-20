@@ -34,16 +34,47 @@ const buildExtractionPrompt = (currency: string): string => {
   const config = CURRENCY_CONFIGS[currency] || CURRENCY_CONFIGS.VND;
 
   return `
-Analyze this product image and extract the product name and price.
+Analyze this product image and extract the product name and price with high accuracy.
 Currency: ${config.promptHint}
+
+CRITICAL Instructions (in order of priority):
+1. PRICE CARD PRIORITY: Look for a price card/label/tag next to or near the product first
+   - Price cards typically show the item name and price clearly
+   - If a price card is visible, extract information from it as the primary source
+   - Only extract from the product packaging/label if no price card is present
+
+2. PRODUCT IDENTIFICATION: Try to identify the exact product
+   - Use visual cues, brand names, packaging text to determine the product
+   - If you can identify the product type, use your knowledge to provide a clear, specific name
+   - Cross-reference visual information to ensure accuracy
+
+3. PRICE DETECTION: Carefully extract the complete price value
+   - VND prices are typically 1,000 or above (thousands range)
+   - Common VND formats: "25.000đ", "25,000đ", "25000 VND"
+   - The dots (.) or commas (,) in VND are thousands separators, NOT decimals
+   - Example: "25.000đ" = 25000 (twenty-five thousand), not 25
+   - For other currencies, support decimal points where applicable
+
+Extraction Strategy:
+- First, scan for price cards/labels near the product
+- Read text on the price card for both name and price
+- If no card exists, read product packaging directly
+- Identify the product based on visible characteristics
+- Extract the complete price value (remember VND uses . or , as thousands separator)
+- Verify the price makes sense for the product type (VND should be ≥1000 typically)
 
 Respond ONLY with valid JSON in this exact format:
 {"name": "<product name or null>", "price": <number or null>, "rawText": "<the price text you found or null>"}
 
+Examples:
+- Price card shows "Bánh mì - 25.000đ" → {"name": "Bánh mì", "price": 25000, "rawText": "25.000đ"}
+- Price card shows "Sữa tươi - 15,500đ" → {"name": "Sữa tươi", "price": 15500, "rawText": "15,500đ"}
+- Product shows "Coca Cola 330ml" with "10.000 VND" → {"name": "Coca Cola 330ml", "price": 10000, "rawText": "10.000 VND"}
+
 Rules:
-- For name, return the product/item name visible on the packaging or label
+- For name, prioritize price card text first, then product packaging/label
 - For price, return the numeric value only without currency symbols
-- Example: "25.000đ" should return {"name": "Bánh mì", "price": 25000, "rawText": "25.000đ"}
+- Remember: In VND, dots and commas are thousands separators (25.000 = 25000)
 - If no price is visible, return null for price and rawText
 - If no name is visible, return null for name
 - Do not include any explanation, only the JSON

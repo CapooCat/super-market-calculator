@@ -35,7 +35,7 @@ const buildSplitPrompt = (items: ISplitItem[], targetPrice: number): string => {
   const estimatedInvoices = Math.max(1, Math.ceil(totalValue / targetPrice));
 
   return `
-You are helping split shopping items into separate invoices.
+You are helping split shopping items into separate invoices with optimal packing.
 
 Total items value: ${totalValue}
 Target price per invoice: ${targetPrice}
@@ -44,11 +44,20 @@ Estimated number of invoices needed: ${estimatedInvoices}
 Items:
 ${itemsList}
 
-Requirements:
-- Split items into invoices where each invoice total is as close to ${targetPrice} as possible
+CRITICAL Requirements (in order of priority):
+1. MINIMIZE the number of invoices - use as few invoices as possible
+2. Each invoice should get as close to ${targetPrice} as possible WITHOUT significantly exceeding it
+3. It's acceptable to slightly exceed ${targetPrice}, but avoid large overages
+4. Pack items efficiently - keep adding items to the current invoice until adding another item would cause a significant overage
+5. Only create a new invoice when the current one is at or near ${targetPrice}
+
+Strategy:
+- Start with invoice 0 and keep adding items until the total reaches or gets very close to ${targetPrice}
+- If adding an item would make the total significantly exceed ${targetPrice}, consider if it's better to:
+  a) Include it anyway if the overage is small (prefer fewer invoices)
+  b) Start a new invoice if the overage would be too large
 - Each item can only be in ONE invoice
 - All items must be assigned to an invoice
-- Try to minimize the difference between each invoice's total and the target price
 
 Respond ONLY with valid JSON in this exact format:
 {"invoices": [{"invoiceIndex": 0, "itemIndices": [0, 2]}, {"invoiceIndex": 1, "itemIndices": [1, 3]}]}
