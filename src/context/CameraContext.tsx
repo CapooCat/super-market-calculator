@@ -40,7 +40,8 @@ export const CameraProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     <CameraContext.Provider value={{ openCamera }}>
       {children}
       <Dialog
-        header="Camera"
+        className="max-h-[100svh]"
+        pt={{ header: { className: "p-2" } }}
         visible={isThisOverlay}
         position="bottom"
         dismissableMask

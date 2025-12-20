@@ -12,7 +12,7 @@ const ConnectionStatus: React.FC<IConnectionStatusProps> = ({ className }) => {
   const { isConnected, isChecking } = useGeminiContext();
 
   const containerClass = classNames(
-    "flex w-fit self-center items-center gap-1 px-3 py-2 rounded-lg text-sm transition-all",
+    "flex w-fit self-center items-center text-xs gap-2 px-2 py-1 rounded-lg transition-all",
     {
       "bg-green-500/20 text-green-400": isConnected && !isChecking,
       "bg-gray-500/20 text-gray-400": !isConnected && !isChecking,
