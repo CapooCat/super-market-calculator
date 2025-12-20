@@ -98,7 +98,7 @@ const OverlayCamera = ({ onConfirm }: IOverlayCameraProps) => {
   return (
     <section className="w-full pb-24">
       <div className={cameraLayout}>
-        <div className="w-full overflow-hidden rounded-2xl max-w-[350px]">
+        <div className="w-full overflow-hidden rounded-2xl max-w-[400px]">
           <video ref={videoRef} className="object-cover w-full aspect-auto max-h-[65svh]" autoPlay />
           <canvas ref={canvasRef} style={{ display: "none" }} />
         </div>
@@ -113,7 +113,7 @@ const OverlayCamera = ({ onConfirm }: IOverlayCameraProps) => {
           )}
           <div className="relative w-full overflow-hidden bg-black rounded-2xl">
             <div className="absolute inset-0 bg-black/50 animation-flash" />
-            <img src={photo?.blob?.url} alt="taken photo" className="object-cover w-full aspect-auto" />
+            <img src={photo?.blob?.url} alt="taken photo" className="object-cover w-full aspect-auto max-h-[65svh]" />
           </div>
         </div>
       </div>
