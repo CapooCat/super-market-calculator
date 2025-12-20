@@ -9,7 +9,7 @@ const compressImage = async (blob: Blob) => {
 
   const options = {
     maxSizeMB: 0.05,
-    initialQuality: 1,
+    initialQuality: 0.8,
     maxWidthOrHeight: 1920,
     fileType: "image/webp",
     useWebWorker: true,
