@@ -143,7 +143,7 @@ export async function checkGeminiConnection(apiKey: string): Promise<boolean> {
     // Use the models.list endpoint - this is a metadata request that doesn't consume tokens
     // https://ai.google.dev/api/models
     // API key passed via header instead of URL to avoid exposure in logs/history
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=1", {
+    const response = await fetch("https://generativelanguage.googleapis.com/v1/models", {
       headers: {
         "x-goog-api-key": apiKey,
       },
